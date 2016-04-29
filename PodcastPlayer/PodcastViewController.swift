@@ -53,16 +53,16 @@ class PodcastViewController: UIViewController, NSXMLParserDelegate {
     func parseEpisode(string: String) {
         switch currentElementName! {
         case "title":
-            currentEpisode?.title = string
+            currentEpisode?.title += string
             break
         case "guid":
-            currentEpisode?.url = string
+            currentEpisode?.url += string
             break
         case "pubDate":
-            currentEpisode?.date = string
+            currentEpisode?.date += string
             break
         case "itunes:summary":
-            currentEpisode?.description = string
+            currentEpisode?.description += string
         default:
             break
         }

@@ -8,8 +8,8 @@
 
 
 class Episode {
-    var title: String?
-    var description: String?
-    var url: String?
-    var date: String?
+    var title = ""
+    var description = ""
+    var url = ""
+    var date = ""
 }
