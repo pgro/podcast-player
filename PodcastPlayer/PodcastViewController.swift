@@ -41,6 +41,7 @@ class PodcastViewController: UICollectionViewController {
         cell.titleLabel.text = episode.title
         cell.descriptionLabel.text = episode.description
         cell.dateLabel.text = episode.date
+        cell.status = PodcastEpisodeCell.Status.NeedsDownload
         
         return cell
     }
@@ -55,20 +56,43 @@ class PodcastViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        // download selected podcast episode if necessary
+        /* download selected podcast episode (if necessary)
+         * and update the cell status accordingly */
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             let episode = self.episodes[indexPath.item]
             let path = self.prepareEpisodeFilePath(episode)
-            if (path.isEmpty) {
-                return;
+            if path == nil {
+                self.updateEpisodeCellStatus(PodcastEpisodeCell.Status.FinishedDownload,
+                                             forCellAtIndexPath: indexPath)
+                return
+            }
+            if path!.isEmpty {
+                self.updateEpisodeCellStatus(PodcastEpisodeCell.Status.NeedsDownload,
+                                             forCellAtIndexPath: indexPath)
+                return
             }
             
+            self.updateEpisodeCellStatus(PodcastEpisodeCell.Status.IsDownloading,
+                                         forCellAtIndexPath: indexPath)
             let episodeFileData = NSData(contentsOfURL: NSURL(string: episode.url)!)
             // TODO: avoid iCloud backup
-            let success = episodeFileData?.writeToFile(path, atomically: true)
-            debugPrint(success)
+            let success = episodeFileData?.writeToFile(path!, atomically: true)
+            let status = (success != nil) ? PodcastEpisodeCell.Status.FinishedDownload
+                                          : PodcastEpisodeCell.Status.NeedsDownload
+            self.updateEpisodeCellStatus(status,
+                                         forCellAtIndexPath: indexPath)
         }
     }
+    
+    
+    func updateEpisodeCellStatus(status: PodcastEpisodeCell.Status,
+                                 forCellAtIndexPath indexPath: NSIndexPath) {
+        dispatch_async(dispatch_get_main_queue()) { 
+            let cell = self.collectionView?.cellForItemAtIndexPath(indexPath) as! PodcastEpisodeCell
+            cell.status = status
+        }
+    }
+    
     
     func folderPathForEpisodes() -> String {
         var folderPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
@@ -76,13 +100,16 @@ class PodcastViewController: UICollectionViewController {
         return folderPath
     }
     
-    func prepareEpisodeFilePath(episode: Episode) -> String {
+    /** Returns the target path for download 
+        or nil if it was already downloaded (i.e. file exists)
+        or an empty string if an error occured. */
+    func prepareEpisodeFilePath(episode: Episode) -> String? {
         let folderPath = self.folderPathForEpisodes()
         let path = folderPath.stringByAppendingString("/" + episode.fileName)
         debugPrint(path)
         
         if NSFileManager.defaultManager().fileExistsAtPath(path) {
-            return ""
+            return nil
         }
         
         do {

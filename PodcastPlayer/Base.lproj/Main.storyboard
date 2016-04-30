@@ -61,11 +61,20 @@
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yfR-Iq-j6U">
+                                            <rect key="frame" x="185" y="0.0" width="15" height="15"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="15" id="H0d-UL-hur"/>
+                                                <constraint firstAttribute="height" constant="15" id="HsD-KX-CC5"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="yfR-Iq-j6U" secondAttribute="trailing" id="21n-jj-oKo"/>
                                     <constraint firstAttribute="trailing" secondItem="Hu8-wa-X0u" secondAttribute="trailing" id="3UY-6K-oej"/>
                                     <constraint firstItem="Hu8-wa-X0u" firstAttribute="top" secondItem="ZvQ-5B-mGd" secondAttribute="top" id="5jA-Pl-rtq"/>
                                     <constraint firstItem="Hu8-wa-X0u" firstAttribute="top" secondItem="P2I-Yv-TIB" secondAttribute="bottom" constant="4" id="DFn-o2-eg1"/>
@@ -73,6 +82,7 @@
                                     <constraint firstItem="68C-3L-dX7" firstAttribute="top" secondItem="P2I-Yv-TIB" secondAttribute="bottom" constant="4" id="HYp-AG-Wzb"/>
                                     <constraint firstAttribute="trailing" secondItem="P2I-Yv-TIB" secondAttribute="trailing" id="Jwx-SH-Aua"/>
                                     <constraint firstItem="P2I-Yv-TIB" firstAttribute="leading" secondItem="ZvQ-5B-mGd" secondAttribute="leading" id="QaF-x9-KLP"/>
+                                    <constraint firstItem="yfR-Iq-j6U" firstAttribute="top" secondItem="ZvQ-5B-mGd" secondAttribute="top" id="a7r-af-lCS"/>
                                     <constraint firstItem="Hu8-wa-X0u" firstAttribute="leading" secondItem="ZvQ-5B-mGd" secondAttribute="leading" id="bBo-EP-8vN"/>
                                     <constraint firstItem="P2I-Yv-TIB" firstAttribute="top" secondItem="ZvQ-5B-mGd" secondAttribute="top" id="dHE-1k-4iH"/>
                                     <constraint firstAttribute="trailing" secondItem="68C-3L-dX7" secondAttribute="trailing" id="fT0-8Q-xHw"/>
@@ -93,6 +103,7 @@
                                 <connections>
                                     <outlet property="dateLabel" destination="Hu8-wa-X0u" id="4dM-8T-HOT"/>
                                     <outlet property="descriptionLabel" destination="68C-3L-dX7" id="etB-lI-m8G"/>
+                                    <outlet property="statusView" destination="yfR-Iq-j6U" id="xv6-73-4ZO"/>
                                     <outlet property="titleLabel" destination="P2I-Yv-TIB" id="U9S-fl-gGj"/>
                                 </connections>
                             </collectionViewCell>
