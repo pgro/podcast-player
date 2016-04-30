@@ -26,9 +26,9 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
     
     func parser(parser: NSXMLParser,
                 didStartElement elementName: String,
-                                namespaceURI: String?,
-                                qualifiedName qName: String?,
-                                              attributes attributeDict: [String : String]) {
+                namespaceURI: String?,
+                qualifiedName qName: String?,
+                attributes attributeDict: [String : String]) {
         currentElementName = elementName
         
         if elementName == "item" {
@@ -78,8 +78,8 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
     
     func parser(parser: NSXMLParser,
                 didEndElement elementName: String,
-                              namespaceURI: String?,
-                              qualifiedName qName: String?) {
+                namespaceURI: String?,
+                qualifiedName qName: String?) {
         if elementName == "item" {
             episodes.append(currentEpisode!)
             currentEpisode = nil
