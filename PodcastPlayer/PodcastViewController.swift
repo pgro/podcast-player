@@ -53,4 +53,45 @@ class PodcastViewController: UICollectionViewController {
             sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         return CGSizeMake(collectionView.bounds.size.width, CGFloat(85))
     }
+    
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        // download selected podcast episode if necessary
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            let path = self.prepareEpisodeFilePath(indexPath.item)
+            if (path.isEmpty) {
+                return;
+            }
+            
+            let episode = self.episodes[indexPath.item]
+            let episodeFileData = NSData(contentsOfURL: NSURL(string: episode.url)!)
+            // TODO: avoid iCloud backup
+            let success = episodeFileData?.writeToFile(path, atomically: true)
+            debugPrint(success)
+        }
+    }
+    
+    func folderPathForEpisodes() -> String {
+        var folderPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        folderPath = folderPath.stringByAppendingString("/episodes")
+        return folderPath
+    }
+    
+    func prepareEpisodeFilePath(episodeIndex: Int) -> String {
+        let folderPath = self.folderPathForEpisodes()
+        let path = folderPath.stringByAppendingFormat("/e_%i.mp3", episodeIndex)
+        debugPrint(path)
+        
+        if NSFileManager.defaultManager().fileExistsAtPath(path) {
+            return ""
+        }
+        
+        do {
+            try NSFileManager.defaultManager().createDirectoryAtPath(folderPath, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            debugPrint(error)
+            return ""
+        }
+        
+        return path
+    }
 }
