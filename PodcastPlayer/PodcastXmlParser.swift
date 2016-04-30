@@ -36,7 +36,18 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
             return
         }
         
+        tryToParseUrl(attributeDict["url"])
+    }
+    
+    func tryToParseUrl(xmlCandidateUrl: String?) {
+        if currentElementName != "enclosure" {
+            return
+        }
+        if xmlCandidateUrl == nil {
+            return
+        }
         
+        currentEpisode?.url = xmlCandidateUrl!
     }
     
     func parser(parser: NSXMLParser,
@@ -54,9 +65,6 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
         switch currentElementName! {
         case "title":
             currentEpisode?.title += string
-            break
-        case "guid":
-            currentEpisode?.url += string
             break
         case "pubDate":
             currentEpisode?.date += string
