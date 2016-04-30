@@ -57,12 +57,12 @@ class PodcastViewController: UICollectionViewController {
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         // download selected podcast episode if necessary
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            let path = self.prepareEpisodeFilePath(indexPath.item)
+            let episode = self.episodes[indexPath.item]
+            let path = self.prepareEpisodeFilePath(episode)
             if (path.isEmpty) {
                 return;
             }
             
-            let episode = self.episodes[indexPath.item]
             let episodeFileData = NSData(contentsOfURL: NSURL(string: episode.url)!)
             // TODO: avoid iCloud backup
             let success = episodeFileData?.writeToFile(path, atomically: true)
@@ -76,9 +76,9 @@ class PodcastViewController: UICollectionViewController {
         return folderPath
     }
     
-    func prepareEpisodeFilePath(episodeIndex: Int) -> String {
+    func prepareEpisodeFilePath(episode: Episode) -> String {
         let folderPath = self.folderPathForEpisodes()
-        let path = folderPath.stringByAppendingFormat("/e_%i.mp3", episodeIndex)
+        let path = folderPath.stringByAppendingString("/" + episode.fileName)
         debugPrint(path)
         
         if NSFileManager.defaultManager().fileExistsAtPath(path) {
