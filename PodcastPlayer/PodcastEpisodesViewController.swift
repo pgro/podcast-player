@@ -50,29 +50,8 @@ class PodcastEpisodesViewController: UICollectionViewController {
     override func collectionView(collectionView: UICollectionView,
                                  cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("episodeCell", forIndexPath: indexPath) as! PodcastEpisodeCell
-        
-        let episode = episodes[indexPath.item]
-        cell.titleLabel.text = episode.title
-        cell.descriptionLabel.text = episode.description
-        cell.dateLabel.text = extractDate(episode.date)
-        cell.status = prepareEpisodeFilePath(episode).status == PathStatus.Exists
-            ? PodcastEpisodeCell.Status.FinishedDownload
-            : PodcastEpisodeCell.Status.NeedsDownload
+        cell.episode = episodes[indexPath.item]
         return cell
-    }
-    
-    /** assumed input format: Mon, 28 Sep 2015 00:30:00 CET
-      * desired output format: 28 Sep 2015 */
-    func extractDate(dateString: String) -> String {
-        var date = dateString
-        
-        let dayIndex = date.characters.indexOf(",")!.advancedBy(2)
-        date = date.substringFromIndex(dayIndex)
-        
-        let yearEndIndex = date.characters.indexOf(":")!.advancedBy(-3)
-        date = date.substringToIndex(yearEndIndex)
-        
-        return date
     }
     
     
