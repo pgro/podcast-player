@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PodcastViewController: UICollectionViewController {
+class PodcastEpisodesViewController: UICollectionViewController {
     var episodes = Array<Episode>()
 
     override func viewDidLoad() {
