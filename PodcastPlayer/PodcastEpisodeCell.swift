@@ -14,6 +14,7 @@ class PodcastEpisodeCell: UICollectionViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var statusView: UIView!
     @IBOutlet weak var downloadButton: UIButton!
+    @IBOutlet weak var downloadingIndicator: UIActivityIndicatorView!
     
     var episode: Episode? {
         didSet {
@@ -39,14 +40,17 @@ class PodcastEpisodeCell: UICollectionViewCell {
         case Status.NeedsDownload:
             statusView.backgroundColor = UIColor.redColor()
             downloadButton.hidden = false
+            downloadingIndicator.stopAnimating()
             break
         case .IsDownloading:
             statusView.backgroundColor = UIColor.yellowColor()
             downloadButton.hidden = true
+            downloadingIndicator.startAnimating()
             break
         case .FinishedDownload:
             statusView.backgroundColor = UIColor.greenColor()
             downloadButton.hidden = true
+            downloadingIndicator.stopAnimating()
             break
         }
     }

@@ -87,6 +87,9 @@
                                                 <action selector="downloadEpisode:" destination="ZvQ-5B-mGd" eventType="touchUpInside" id="NbR-0I-Pzj"/>
                                             </connections>
                                         </button>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="KEC-MB-zEd">
+                                            <rect key="frame" x="155" y="0.0" width="20" height="20"/>
+                                        </activityIndicatorView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
@@ -95,7 +98,9 @@
                                     <constraint firstAttribute="trailing" secondItem="yfR-Iq-j6U" secondAttribute="trailing" id="21n-jj-oKo"/>
                                     <constraint firstAttribute="trailing" secondItem="Hu8-wa-X0u" secondAttribute="trailing" id="3UY-6K-oej"/>
                                     <constraint firstItem="Hu8-wa-X0u" firstAttribute="top" secondItem="ZvQ-5B-mGd" secondAttribute="top" id="5jA-Pl-rtq"/>
+                                    <constraint firstItem="KEC-MB-zEd" firstAttribute="top" secondItem="m9O-hM-Wy6" secondAttribute="top" id="CfW-wG-5V9"/>
                                     <constraint firstItem="Hu8-wa-X0u" firstAttribute="top" secondItem="P2I-Yv-TIB" secondAttribute="bottom" constant="4" id="DFn-o2-eg1"/>
+                                    <constraint firstItem="KEC-MB-zEd" firstAttribute="centerX" secondItem="m9O-hM-Wy6" secondAttribute="centerX" id="Fli-S7-1xG"/>
                                     <constraint firstAttribute="bottom" secondItem="68C-3L-dX7" secondAttribute="bottom" id="Geq-MI-hbA"/>
                                     <constraint firstItem="68C-3L-dX7" firstAttribute="top" secondItem="P2I-Yv-TIB" secondAttribute="bottom" constant="4" id="HYp-AG-Wzb"/>
                                     <constraint firstAttribute="trailing" secondItem="P2I-Yv-TIB" secondAttribute="trailing" id="Jwx-SH-Aua"/>
@@ -126,6 +131,7 @@
                                     <outlet property="dateLabel" destination="Hu8-wa-X0u" id="4dM-8T-HOT"/>
                                     <outlet property="descriptionLabel" destination="68C-3L-dX7" id="etB-lI-m8G"/>
                                     <outlet property="downloadButton" destination="m9O-hM-Wy6" id="ffU-vM-CSx"/>
+                                    <outlet property="downloadingIndicator" destination="KEC-MB-zEd" id="Lgc-fh-ymK"/>
                                     <outlet property="statusView" destination="yfR-Iq-j6U" id="xv6-73-4ZO"/>
                                     <outlet property="titleLabel" destination="P2I-Yv-TIB" id="U9S-fl-gGj"/>
                                 </connections>
