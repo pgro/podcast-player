@@ -56,6 +56,12 @@ class PodcastViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let cell = self.collectionView?.cellForItemAtIndexPath(indexPath) as! PodcastEpisodeCell
+        if cell.status == PodcastEpisodeCell.Status.IsDownloading {
+            // download is already in progress -> nothing to do
+            return
+        }
+        
         /* download selected podcast episode (if necessary)
          * and update the cell status accordingly */
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
