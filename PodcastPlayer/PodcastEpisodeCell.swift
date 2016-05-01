@@ -22,34 +22,33 @@ class PodcastEpisodeCell: UICollectionViewCell {
     }
 
     
-    enum Status {
-        case NeedsDownload
-        case IsDownloading
-        case FinishedDownload
     @IBAction func downloadEpisode(sender: AnyObject) {
         episode?.download()
     }
     
-    var status = Status.NeedsDownload {
-        didSet {
-            switch status {
-            case .NeedsDownload:
-                statusView.backgroundColor = UIColor.redColor()
-                break
-            case .IsDownloading:
-                statusView.backgroundColor = UIColor.yellowColor()
-                break
-            case .FinishedDownload:
-                statusView.backgroundColor = UIColor.greenColor()
-                break
-            }
-        }
-    }
 
     func updateViewFromEpisode() {
         titleLabel.text = episode!.title
         descriptionLabel.text = episode!.description
         dateLabel.text = extractDate(episode!.date)
+        updateViewFromStatus()
+    }
+    
+    func updateViewFromStatus() {
+        switch episode!.status {
+        case Status.NeedsDownload:
+            statusView.backgroundColor = UIColor.redColor()
+            downloadButton.hidden = false
+            break
+        case .IsDownloading:
+            statusView.backgroundColor = UIColor.yellowColor()
+            downloadButton.hidden = true
+            break
+        case .FinishedDownload:
+            statusView.backgroundColor = UIColor.greenColor()
+            downloadButton.hidden = true
+            break
+        }
     }
     
     /** assumed input format: Mon, 28 Sep 2015 00:30:00 CET
