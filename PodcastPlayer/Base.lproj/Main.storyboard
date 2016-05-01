@@ -14,19 +14,19 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="zuA-YM-oZH" kind="relationship" relationship="rootViewController" id="CTX-9x-fcJ"/>
+                        <segue destination="bEP-ek-pCu" kind="relationship" relationship="rootViewController" id="a6B-pw-hFV"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7LF-re-7Vi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="198" y="-491"/>
         </scene>
-        <!--Podcast Episodes-->
+        <!--Podcast Episodes View Controller-->
         <scene sceneID="9kQ-Me-9NE">
             <objects>
                 <collectionViewController id="zuA-YM-oZH" customClass="PodcastEpisodesViewController" customModule="PodcastPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="gSt-Xz-fBW">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ycz-l1-E5l">
@@ -37,7 +37,7 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="episodeCell" id="ZvQ-5B-mGd" customClass="PodcastEpisodeCell" customModule="PodcastPlayer" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="200" height="85"/>
+                                <rect key="frame" x="0.0" y="0.0" width="200" height="85"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="200" height="85"/>
@@ -113,11 +113,43 @@
                             <outlet property="delegate" destination="zuA-YM-oZH" id="soW-oV-PVN"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Podcast Episodes" id="7tk-aA-Q0K"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Odd-hK-kdw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="878" y="-491"/>
+            <point key="canvasLocation" x="1582" y="-491"/>
+        </scene>
+        <!--Main View Controller-->
+        <scene sceneID="DnD-ON-gcg">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="bEP-ek-pCu" customClass="MainViewController" customModule="PodcastPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2ol-w7-UT0"/>
+                        <viewControllerLayoutGuide type="bottom" id="iOo-UR-URw"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ckx-Yw-QTW">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JSk-ET-GLk">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <connections>
+                                    <segue destination="zuA-YM-oZH" kind="embed" identifier="embedEpisodesSegue" id="Uvl-uA-N0V"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="JSk-ET-GLk" secondAttribute="trailing" id="7bZ-34-gqy"/>
+                            <constraint firstItem="iOo-UR-URw" firstAttribute="top" secondItem="JSk-ET-GLk" secondAttribute="bottom" id="kg5-Mn-b8i"/>
+                            <constraint firstItem="JSk-ET-GLk" firstAttribute="top" secondItem="2ol-w7-UT0" secondAttribute="bottom" id="niV-Dv-Pya"/>
+                            <constraint firstItem="JSk-ET-GLk" firstAttribute="leading" secondItem="ckx-Yw-QTW" secondAttribute="leading" id="oBm-qq-ftA"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="wGp-w6-R2l"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jgq-3V-hT2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="892" y="-491"/>
         </scene>
     </scenes>
 </document>
