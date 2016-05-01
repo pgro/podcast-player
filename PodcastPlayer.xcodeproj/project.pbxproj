@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		26082C3F1CD6084F00583FF1 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26082C3E1CD6084F00583FF1 /* MainViewController.swift */; };
+		26082C431CD618D900583FF1 /* fontawesome-webfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26082C421CD618D900583FF1 /* fontawesome-webfont.ttf */; };
 		264933C71CD4A55100FD5340 /* PodcastEpisodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264933C61CD4A55100FD5340 /* PodcastEpisodeCell.swift */; };
 		2673C0061CD3C0A8009CC7FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2673C0051CD3C0A8009CC7FB /* AppDelegate.swift */; };
 		2673C0081CD3C0A8009CC7FB /* PodcastEpisodesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2673C0071CD3C0A8009CC7FB /* PodcastEpisodesViewController.swift */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		26082C3E1CD6084F00583FF1 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		26082C421CD618D900583FF1 /* fontawesome-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "fontawesome-webfont.ttf"; sourceTree = "<group>"; };
 		264933C61CD4A55100FD5340 /* PodcastEpisodeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodcastEpisodeCell.swift; sourceTree = "<group>"; };
 		2673C0021CD3C0A8009CC7FB /* PodcastPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PodcastPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2673C0051CD3C0A8009CC7FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -48,6 +50,7 @@
 			children = (
 				2673C0051CD3C0A8009CC7FB /* AppDelegate.swift */,
 				2673C00C1CD3C0A8009CC7FB /* Assets.xcassets */,
+				26082C421CD618D900583FF1 /* fontawesome-webfont.ttf */,
 				2673C00E1CD3C0A8009CC7FB /* LaunchScreen.storyboard */,
 				2673C0111CD3C0A8009CC7FB /* Info.plist */,
 			);
@@ -151,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2673C0101CD3C0A8009CC7FB /* LaunchScreen.storyboard in Resources */,
+				26082C431CD618D900583FF1 /* fontawesome-webfont.ttf in Resources */,
 				2673C00D1CD3C0A8009CC7FB /* Assets.xcassets in Resources */,
 				2673C00B1CD3C0A8009CC7FB /* Main.storyboard in Resources */,
 			);

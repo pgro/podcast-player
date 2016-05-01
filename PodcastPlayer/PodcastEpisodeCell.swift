@@ -13,6 +13,7 @@ class PodcastEpisodeCell: UICollectionViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var statusView: UIView!
+    @IBOutlet weak var downloadButton: UIButton!
 
     
     enum Status {
