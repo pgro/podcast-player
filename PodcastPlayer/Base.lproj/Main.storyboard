@@ -83,6 +83,9 @@
                                             <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="21"/>
                                             <inset key="contentEdgeInsets" minX="0.0" minY="-20" maxX="0.0" maxY="0.0"/>
                                             <state key="normal" title=""/>
+                                            <connections>
+                                                <action selector="downloadEpisode:" destination="ZvQ-5B-mGd" eventType="touchUpInside" id="NbR-0I-Pzj"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

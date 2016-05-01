@@ -26,6 +26,8 @@ class PodcastEpisodeCell: UICollectionViewCell {
         case NeedsDownload
         case IsDownloading
         case FinishedDownload
+    @IBAction func downloadEpisode(sender: AnyObject) {
+        episode?.download()
     }
     
     var status = Status.NeedsDownload {
