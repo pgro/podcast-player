@@ -38,17 +38,17 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     
     func updateViewFromStatus() {
         switch episode!.status {
-        case Status.NeedsDownload:
+        case .NotStarted:
             statusView.backgroundColor = UIColor.redColor()
             downloadButton.hidden = false
             downloadingIndicator.stopAnimating()
             break
-        case .IsDownloading:
+        case .InProgress:
             statusView.backgroundColor = UIColor.yellowColor()
             downloadButton.hidden = true
             downloadingIndicator.startAnimating()
             break
-        case .FinishedDownload:
+        case .Finished:
             statusView.backgroundColor = UIColor.greenColor()
             downloadButton.hidden = true
             downloadingIndicator.stopAnimating()
@@ -73,7 +73,7 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     
 // MARK: - EpisodeDelegate
     
-    func episode(episode: Episode, didChangeStatus status: Status) {
+    func episode(episode: Episode, didChangeStatus status: DownloadStatus) {
         updateViewFromStatus()
     }
 }

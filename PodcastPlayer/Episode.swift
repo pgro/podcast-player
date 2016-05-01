@@ -9,14 +9,14 @@
 import Foundation
 
 
-enum Status {
-    case NeedsDownload
-    case IsDownloading
-    case FinishedDownload
+enum DownloadStatus {
+    case NotStarted
+    case InProgress
+    case Finished
 }
 
 protocol EpisodeDelegate: class {
-    func episode(episode: Episode, didChangeStatus status: Status)
+    func episode(episode: Episode, didChangeStatus status: DownloadStatus)
 }
 
 class Episode {
@@ -26,13 +26,13 @@ class Episode {
         didSet {
             prepareFileName()
             status = prepareEpisodeFilePath().status == PathStatus.Exists
-                                                ? Status.FinishedDownload
-                                                : Status.NeedsDownload
+                                                ? DownloadStatus.Finished
+                                                : DownloadStatus.NotStarted
         }
     }
     var date = ""
     var fileName = ""
-    var status = Status.NeedsDownload {
+    var status = DownloadStatus.NotStarted {
         didSet {
             dispatch_async(dispatch_get_main_queue()) {
                 self.delegate?.episode(self, didChangeStatus: self.status)
@@ -65,7 +65,7 @@ class Episode {
     
     
     func download() {
-        if status == Status.IsDownloading {
+        if status == DownloadStatus.InProgress {
             // download is already in progress -> nothing to do
             return
         }
@@ -75,20 +75,20 @@ class Episode {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             let result = self.prepareEpisodeFilePath()
             if result.status == PathStatus.Exists {
-                self.status = Status.FinishedDownload
+                self.status = DownloadStatus.Finished
                 return
             }
             if result.status == PathStatus.Error {
-                self.status = Status.NeedsDownload
+                self.status = DownloadStatus.NotStarted
                 return
             }
             
-            self.status = Status.IsDownloading
+            self.status = DownloadStatus.InProgress
             let episodeFileData = NSData(contentsOfURL: NSURL(string: self.url)!)
             // TODO: avoid iCloud backup
             let success = episodeFileData?.writeToFile(result.path!, atomically: true)
-            self.status = (success != nil) ? Status.FinishedDownload
-                                           : Status.NeedsDownload
+            self.status = (success != nil) ? DownloadStatus.Finished
+                                           : DownloadStatus.NotStarted
         }
     }
     
