@@ -43,6 +43,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		26082C401CD6094100583FF1 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2673C0051CD3C0A8009CC7FB /* AppDelegate.swift */,
+				2673C00C1CD3C0A8009CC7FB /* Assets.xcassets */,
+				2673C00E1CD3C0A8009CC7FB /* LaunchScreen.storyboard */,
+				2673C0111CD3C0A8009CC7FB /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		26082C411CD6096E00583FF1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2673C0171CD3CE1B009CC7FB /* Episode.swift */,
+				2673C0191CD3E4FB009CC7FB /* PodcastXmlParser.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		2673BFF91CD3C0A8009CC7FB = {
 			isa = PBXGroup;
 			children = (
@@ -62,16 +82,12 @@
 		2673C0041CD3C0A8009CC7FB /* PodcastPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				2673C0051CD3C0A8009CC7FB /* AppDelegate.swift */,
-				2673C0071CD3C0A8009CC7FB /* PodcastEpisodesViewController.swift */,
+				26082C401CD6094100583FF1 /* Supporting Files */,
 				2673C0091CD3C0A8009CC7FB /* Main.storyboard */,
-				2673C00C1CD3C0A8009CC7FB /* Assets.xcassets */,
-				2673C00E1CD3C0A8009CC7FB /* LaunchScreen.storyboard */,
-				2673C0111CD3C0A8009CC7FB /* Info.plist */,
-				2673C0171CD3CE1B009CC7FB /* Episode.swift */,
-				2673C0191CD3E4FB009CC7FB /* PodcastXmlParser.swift */,
-				264933C61CD4A55100FD5340 /* PodcastEpisodeCell.swift */,
+				26082C411CD6096E00583FF1 /* Model */,
 				26082C3E1CD6084F00583FF1 /* MainViewController.swift */,
+				264933C61CD4A55100FD5340 /* PodcastEpisodeCell.swift */,
+				2673C0071CD3C0A8009CC7FB /* PodcastEpisodesViewController.swift */,
 			);
 			path = PodcastPlayer;
 			sourceTree = "<group>";
