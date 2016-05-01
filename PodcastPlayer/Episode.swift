@@ -15,6 +15,10 @@ enum Status {
     case FinishedDownload
 }
 
+protocol EpisodeDelegate: class {
+    func episode(episode: Episode, didChangeStatus status: Status)
+}
+
 class Episode {
     var title = ""
     var description = ""
@@ -28,7 +32,14 @@ class Episode {
     }
     var date = ""
     var fileName = ""
-    var status = Status.NeedsDownload
+    var status = Status.NeedsDownload {
+        didSet {
+            dispatch_async(dispatch_get_main_queue()) {
+                self.delegate?.episode(self, didChangeStatus: self.status)
+            }
+        }
+    }
+    weak var delegate: EpisodeDelegate?
     
     
     /** Retrieves the unique file name for the current url from user defaults.

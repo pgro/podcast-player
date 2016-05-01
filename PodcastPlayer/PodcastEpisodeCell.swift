@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PodcastEpisodeCell: UICollectionViewCell {
+class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
@@ -18,6 +18,7 @@ class PodcastEpisodeCell: UICollectionViewCell {
     
     var episode: Episode? {
         didSet {
+            episode?.delegate = self
             updateViewFromEpisode()
         }
     }
@@ -67,5 +68,12 @@ class PodcastEpisodeCell: UICollectionViewCell {
         date = date.substringToIndex(yearEndIndex)
         
         return date
+    }
+    
+    
+// MARK: - EpisodeDelegate
+    
+    func episode(episode: Episode, didChangeStatus status: Status) {
+        updateViewFromStatus()
     }
 }
