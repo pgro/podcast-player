@@ -136,16 +136,24 @@
                                     <segue destination="zuA-YM-oZH" kind="embed" identifier="embedEpisodesSegue" id="Uvl-uA-N0V"/>
                                 </connections>
                             </containerView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="aiD-4v-A2C">
+                                <rect key="frame" x="290" y="290" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="aiD-4v-A2C" firstAttribute="centerX" secondItem="ckx-Yw-QTW" secondAttribute="centerX" id="5C6-HR-IJ9"/>
                             <constraint firstAttribute="trailing" secondItem="JSk-ET-GLk" secondAttribute="trailing" id="7bZ-34-gqy"/>
+                            <constraint firstItem="aiD-4v-A2C" firstAttribute="centerY" secondItem="ckx-Yw-QTW" secondAttribute="centerY" id="YdE-En-pZG"/>
                             <constraint firstItem="iOo-UR-URw" firstAttribute="top" secondItem="JSk-ET-GLk" secondAttribute="bottom" id="kg5-Mn-b8i"/>
                             <constraint firstItem="JSk-ET-GLk" firstAttribute="top" secondItem="2ol-w7-UT0" secondAttribute="bottom" id="niV-Dv-Pya"/>
                             <constraint firstItem="JSk-ET-GLk" firstAttribute="leading" secondItem="ckx-Yw-QTW" secondAttribute="leading" id="oBm-qq-ftA"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="wGp-w6-R2l"/>
+                    <connections>
+                        <outlet property="waitingIndicator" destination="aiD-4v-A2C" id="mUM-Nx-spt"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jgq-3V-hT2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

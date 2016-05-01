@@ -10,13 +10,27 @@ import UIKit
 
 class PodcastEpisodesViewController: UICollectionViewController {
     var episodes = Array<Episode>()
+    weak var waitingIndicator: UIActivityIndicatorView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let parser = PodcastXmlParser()
-        episodes = parser.parseEpisodes()
+        loadEpisodes()
     }
+    
+    
+    func loadEpisodes() {
+        waitingIndicator?.startAnimating()
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            let parser = PodcastXmlParser()
+            self.episodes = parser.parseEpisodes()
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                self.waitingIndicator?.stopAnimating()
+                self.collectionView?.reloadData()
+            }
+        }
+    }
+    
     
     override func viewWillTransitionToSize(size: CGSize,
           withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
