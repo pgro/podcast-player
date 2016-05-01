@@ -12,6 +12,7 @@ class PodcastEpisodesViewController: UICollectionViewController {
     var episodes = Array<Episode>()
     weak var waitingIndicator: UIActivityIndicatorView?
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadEpisodes()
@@ -33,9 +34,8 @@ class PodcastEpisodesViewController: UICollectionViewController {
     
     
     override func viewWillTransitionToSize(size: CGSize,
-          withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+                                           withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        
         collectionViewLayout.invalidateLayout()
     }
     
@@ -48,7 +48,7 @@ class PodcastEpisodesViewController: UICollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView,
-                cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+                                 cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("episodeCell", forIndexPath: indexPath) as! PodcastEpisodeCell
         
         let episode = episodes[indexPath.item]
@@ -79,8 +79,8 @@ class PodcastEpisodesViewController: UICollectionViewController {
     // MARK: UICollectionViewDelegate
     
     func collectionView(collectionView: UICollectionView,
-            layout collectionViewLayout: UICollectionViewLayout,
-            sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         return CGSizeMake(collectionView.bounds.size.width, CGFloat(85))
     }
     
