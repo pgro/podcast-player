@@ -39,6 +39,15 @@ class PodcastEpisodesViewController: UICollectionViewController {
         collectionViewLayout.invalidateLayout()
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "showEpisodeDetailSegue" {
+            let controller = segue.destinationViewController as? PodcastEpisodeDetailViewController
+            let episodeCell = sender as? PodcastEpisodeCell
+            controller?.episode = episodeCell?.episode
+            return
+        }
+    }
+    
     
     //MARK: - UICollectionViewDataSource
     

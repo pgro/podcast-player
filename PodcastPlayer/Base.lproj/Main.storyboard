@@ -134,6 +134,7 @@
                                     <outlet property="downloadingIndicator" destination="KEC-MB-zEd" id="Lgc-fh-ymK"/>
                                     <outlet property="statusView" destination="yfR-Iq-j6U" id="xv6-73-4ZO"/>
                                     <outlet property="titleLabel" destination="P2I-Yv-TIB" id="U9S-fl-gGj"/>
+                                    <segue destination="l7D-lh-Lkg" kind="show" identifier="showEpisodeDetailSegue" id="Wgw-SH-TcL"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
