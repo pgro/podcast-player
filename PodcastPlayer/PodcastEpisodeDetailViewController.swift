@@ -21,6 +21,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var playbackProgressSlider: UISlider!
     var isPlaybackProgressSliderTouched = false
+    @IBOutlet weak var volumeSlider: UISlider!
+    @IBOutlet weak var speakerIconView: UILabel!
     
     
     override func viewDidLoad() {
@@ -35,6 +37,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
         let fileUrl = NSURL(fileURLWithPath: result!.path!)
         let playerItem = AVPlayerItem(URL: fileUrl)
         self.player.replaceCurrentItemWithPlayerItem(playerItem)
+        
+        self.player.volume = volumeSlider.value
         
         playerObserver = self.player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
                                                                         queue: dispatch_get_main_queue())
@@ -66,6 +70,12 @@ class PodcastEpisodeDetailViewController: UIViewController {
         } else {
             self.player.pause()
         }
+    }
+    
+    @IBAction func changeVolume(sender: AnyObject) {
+        player.volume = volumeSlider.value
+        // set respective speaker icon via Font Awesome
+        speakerIconView.text = volumeSlider.value == 0 ? "" : ""
     }
     
 
