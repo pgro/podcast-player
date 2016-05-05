@@ -84,11 +84,14 @@ class Episode {
             }
             
             self.status = DownloadStatus.InProgress
-            let episodeFileData = NSData(contentsOfURL: NSURL(string: self.url)!)
-            let success = episodeFileData?.writeToFile(result.path!, atomically: true)
-            self.status = (success != nil) ? DownloadStatus.Finished
-                                           : DownloadStatus.NotStarted
-            if (success != nil) {
+            guard let episodeFileData = NSData(contentsOfURL: NSURL(string: self.url)!) else {
+                self.status = DownloadStatus.NotStarted
+                return
+            }
+            let success = episodeFileData.writeToFile(result.path!, atomically: true)
+            self.status = success ? DownloadStatus.Finished
+                                  : DownloadStatus.NotStarted
+            if success {
                 // exclude downloaded file from iCloud backup
                 do {
                     let fileUrl = NSURL(fileURLWithPath: result.path!)
