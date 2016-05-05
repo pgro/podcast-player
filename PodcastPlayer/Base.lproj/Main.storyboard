@@ -178,20 +178,33 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ERu-eD-WJ9">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ERu-eD-WJ9" userLabel="Play Controls Container">
                                 <rect key="frame" x="10" y="147" width="580" height="379"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k8Q-Wd-kAU">
-                                        <rect key="frame" x="20" y="20" width="30" height="30"/>
+                                        <rect key="frame" x="20" y="20" width="60" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="zM9-ny-a6F"/>
+                                        </constraints>
                                         <state key="normal" title="play"/>
                                         <connections>
                                             <action selector="togglePlayback:" destination="l7D-lh-Lkg" eventType="touchUpInside" id="Evv-Ml-dUR"/>
                                         </connections>
                                     </button>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="QlF-AV-ASa">
+                                        <rect key="frame" x="8" y="80" width="534" height="31"/>
+                                        <connections>
+                                            <action selector="startPlaybackProgressUpdate:" destination="l7D-lh-Lkg" eventType="touchDown" id="xj3-HO-PDU"/>
+                                            <action selector="updatePlaybackProgress:" destination="l7D-lh-Lkg" eventType="touchUpInside" id="g8A-wt-KWR"/>
+                                        </connections>
+                                    </slider>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="k8Q-Wd-kAU" firstAttribute="leading" secondItem="ERu-eD-WJ9" secondAttribute="leading" constant="20" id="A0L-tg-uPg"/>
+                                    <constraint firstItem="QlF-AV-ASa" firstAttribute="leading" secondItem="ERu-eD-WJ9" secondAttribute="leading" constant="10" id="LSc-Kv-QzA"/>
+                                    <constraint firstAttribute="trailing" secondItem="QlF-AV-ASa" secondAttribute="trailing" constant="40" id="f5f-Ng-ATG"/>
+                                    <constraint firstItem="QlF-AV-ASa" firstAttribute="top" secondItem="k8Q-Wd-kAU" secondAttribute="bottom" constant="30" id="y6M-eT-dHs"/>
                                     <constraint firstItem="k8Q-Wd-kAU" firstAttribute="top" secondItem="ERu-eD-WJ9" secondAttribute="top" constant="20" id="zKM-aG-qhU"/>
                                 </constraints>
                             </view>
@@ -222,6 +235,7 @@
                         <outlet property="descriptionLabel" destination="TE1-Ya-Yxl" id="dRT-y4-Lz3"/>
                         <outlet property="durationLabel" destination="ndZ-Jd-Hj7" id="Yc7-Bl-5Ln"/>
                         <outlet property="playButton" destination="k8Q-Wd-kAU" id="bFe-gN-84i"/>
+                        <outlet property="playbackProgressSlider" destination="QlF-AV-ASa" id="gM7-fL-oOB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JSf-Le-v06" userLabel="First Responder" sceneMemberID="firstResponder"/>
