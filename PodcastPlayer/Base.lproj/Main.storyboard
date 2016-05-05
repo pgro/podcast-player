@@ -178,14 +178,35 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ERu-eD-WJ9">
+                                <rect key="frame" x="10" y="147" width="580" height="379"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k8Q-Wd-kAU">
+                                        <rect key="frame" x="20" y="20" width="30" height="30"/>
+                                        <state key="normal" title="play"/>
+                                        <connections>
+                                            <action selector="togglePlayback:" destination="l7D-lh-Lkg" eventType="touchUpInside" id="Evv-Ml-dUR"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="k8Q-Wd-kAU" firstAttribute="leading" secondItem="ERu-eD-WJ9" secondAttribute="leading" constant="20" id="A0L-tg-uPg"/>
+                                    <constraint firstItem="k8Q-Wd-kAU" firstAttribute="top" secondItem="ERu-eD-WJ9" secondAttribute="top" constant="20" id="zKM-aG-qhU"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="ERu-eD-WJ9" firstAttribute="top" secondItem="TE1-Ya-Yxl" secondAttribute="bottom" constant="20" id="51m-a0-vQI"/>
                             <constraint firstItem="ndZ-Jd-Hj7" firstAttribute="top" secondItem="knH-fQ-k7w" secondAttribute="bottom" constant="20" id="B64-cn-HNB"/>
                             <constraint firstItem="lQv-9h-47i" firstAttribute="top" secondItem="knH-fQ-k7w" secondAttribute="bottom" constant="20" id="BhE-mO-REB"/>
                             <constraint firstItem="lQv-9h-47i" firstAttribute="leading" secondItem="Mfm-1L-lVw" secondAttribute="leading" constant="10" id="RgN-lJ-ob8"/>
                             <constraint firstItem="TE1-Ya-Yxl" firstAttribute="top" secondItem="lQv-9h-47i" secondAttribute="bottom" constant="30" id="UL8-Ix-hXs"/>
+                            <constraint firstAttribute="trailing" secondItem="ERu-eD-WJ9" secondAttribute="trailing" constant="10" id="h8b-pQ-1wJ"/>
+                            <constraint firstItem="xLS-aJ-kbj" firstAttribute="top" secondItem="ERu-eD-WJ9" secondAttribute="bottom" constant="10" id="mPU-tI-qZp"/>
                             <constraint firstItem="lQv-9h-47i" firstAttribute="top" secondItem="ndZ-Jd-Hj7" secondAttribute="bottom" constant="20" id="niS-Dk-Xus"/>
+                            <constraint firstItem="ERu-eD-WJ9" firstAttribute="leading" secondItem="Mfm-1L-lVw" secondAttribute="leading" constant="10" id="odu-5c-rBw"/>
                             <constraint firstItem="TE1-Ya-Yxl" firstAttribute="leading" secondItem="Mfm-1L-lVw" secondAttribute="leading" constant="10" id="srA-FM-EJO"/>
                             <constraint firstAttribute="trailing" secondItem="TE1-Ya-Yxl" secondAttribute="trailing" constant="10" id="u7s-Vy-a1O"/>
                             <constraint firstItem="ndZ-Jd-Hj7" firstAttribute="leading" secondItem="Mfm-1L-lVw" secondAttribute="leading" constant="10" id="yaG-lP-JNH"/>
@@ -200,6 +221,7 @@
                         <outlet property="dateLabel" destination="lQv-9h-47i" id="wPA-Bb-4KZ"/>
                         <outlet property="descriptionLabel" destination="TE1-Ya-Yxl" id="dRT-y4-Lz3"/>
                         <outlet property="durationLabel" destination="ndZ-Jd-Hj7" id="Yc7-Bl-5Ln"/>
+                        <outlet property="playButton" destination="k8Q-Wd-kAU" id="bFe-gN-84i"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JSf-Le-v06" userLabel="First Responder" sceneMemberID="firstResponder"/>

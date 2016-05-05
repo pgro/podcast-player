@@ -121,8 +121,7 @@ class Episode {
     }
     
     /** Returns the target path for download when it is available
-     or nil if it was already downloaded (i.e. file exists)
-     or if an error occured. */
+     or nil if an error occured. */
     func prepareEpisodeFilePath() -> (status: PathStatus, path: String?) {
         let folderPath = folderPathForEpisodes()
         let path = folderPath.stringByAppendingString("/" + fileName)
@@ -140,7 +139,7 @@ class Episode {
                 debugPrint(error)
             }
             
-            return (PathStatus.Exists, nil)
+            return (PathStatus.Exists, path)
         }
         
         do {
