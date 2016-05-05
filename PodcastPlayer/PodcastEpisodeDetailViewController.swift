@@ -12,6 +12,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     var episode: Episode?
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var durationLabel: UILabel!
     
     
     override func viewDidLoad() {
@@ -20,5 +21,6 @@ class PodcastEpisodeDetailViewController: UIViewController {
         self.navigationItem.title = episode?.title
         self.dateLabel.text = episode?.date
         self.descriptionLabel.text = episode?.description
+        self.durationLabel.text = episode?.duration
     }
 }

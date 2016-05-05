@@ -71,6 +71,10 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
             break
         case "itunes:summary":
             currentEpisode?.description += string
+            break
+        case "itunes:duration":
+            currentEpisode?.duration += string
+            break
         default:
             break
         }

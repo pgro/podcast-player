@@ -31,6 +31,7 @@ class Episode {
         }
     }
     var date = ""
+    var duration = ""
     var fileName = ""
     var status = DownloadStatus.NotStarted {
         didSet {
