@@ -62,7 +62,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
     @IBAction func togglePlayback(sender: AnyObject) {
         self.isPlaying = !self.isPlaying
         
-        let title = self.isPlaying ? "pause" : "play"
+        // set pause/play icon via Font Awesome
+        let title = self.isPlaying ? "" : ""
         self.playButton.setTitle(title, forState: UIControlState.Normal)
         
         if self.isPlaying {
