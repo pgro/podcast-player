@@ -123,12 +123,24 @@ class Episode {
         let folderPath = folderPathForEpisodes()
         let path = folderPath.stringByAppendingString("/" + fileName)
         
-        if NSFileManager.defaultManager().fileExistsAtPath(path) {
+        let fileManager = NSFileManager.defaultManager()
+        if fileManager.fileExistsAtPath(path) {
+            do {
+                let fileUrl = NSURL(fileURLWithPath: path)
+                var value: AnyObject?
+                try fileUrl.getResourceValue(&value, forKey: NSURLIsExcludedFromBackupKey)
+                let isExcluded = value as? NSNumber
+                assert(isExcluded != nil && isExcluded!.boolValue,
+                       "downloaded podcast episode must be excluded from iCloud backup")
+            } catch {
+                debugPrint(error)
+            }
+            
             return (PathStatus.Exists, nil)
         }
         
         do {
-            try NSFileManager.defaultManager().createDirectoryAtPath(folderPath, withIntermediateDirectories: true, attributes: nil)
+            try fileManager.createDirectoryAtPath(folderPath, withIntermediateDirectories: true, attributes: nil)
         } catch {
             debugPrint(error)
             return (PathStatus.Error, nil)
