@@ -143,14 +143,22 @@ class PodcastEpisodeDetailViewController: UIViewController {
     }
     
     func updatePlaybackProgressAndDuration() {
-        let total = player.currentItem?.asset.duration.seconds
-        durationLabel.text = convertTimeToString(total!)
-        
-        let episodesToProgress = retrieveProgressStorage()
-        let url = episode!.url
-        if episodesToProgress[url] != nil {
-            playbackProgressSlider.value = episodesToProgress[url]!
-            updatePlaybackProgress(self)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            /* retrieve duration asynchronous so the GUI is not blocked
+             * when the asset needs to be retrieved from a remote URL */
+            let total = self.player.currentItem?.asset.duration.seconds
+            
+            let episodesToProgress = self.retrieveProgressStorage()
+            let url = self.episode!.url
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                self.durationLabel.text = self.convertTimeToString(total!)
+                
+                if episodesToProgress[url] != nil {
+                    self.playbackProgressSlider.value = episodesToProgress[url]!
+                    self.updatePlaybackProgress(self)
+                }
+            }
         }
     }
     
