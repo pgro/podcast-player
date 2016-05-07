@@ -43,7 +43,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         self.player.replaceCurrentItemWithPlayerItem(playerItem)
         
         self.player.volume = volumeSlider.value
-        restorePlaybackPogress()
+        restorePlaybackProgress()
         
         playerObserver = self.player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
                                                                         queue: dispatch_get_main_queue())
@@ -55,7 +55,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
                                                          name: AVPlayerItemDidPlayToEndTimeNotification,
                                                          object: playerItem)
         NSNotificationCenter.defaultCenter().addObserver(self,
-                                                         selector: #selector(savePlaybackPogress),
+                                                         selector: #selector(savePlaybackProgress),
                                                          name: UIApplicationDidEnterBackgroundNotification,
                                                          object: nil)
     }
@@ -66,7 +66,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         player.removeTimeObserver(playerObserver!)
         NSNotificationCenter.defaultCenter().removeObserver(self)
         
-        savePlaybackPogress()
+        savePlaybackProgress()
     }
     
     
@@ -124,7 +124,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
 // MARK: load from/save to user defaults
     
     /** saves progress percentage per episode url */
-    func savePlaybackPogress() {
+    func savePlaybackProgress() {
         var episodesToProgress = retrieveProgressStorage()
         let url = episode!.url
         episodesToProgress[url] = playbackProgressSlider.value
@@ -132,7 +132,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         defaults.setValue(episodesToProgress, forKey: episodePlaybackProgressKey)
     }
     
-    func restorePlaybackPogress() {
+    func restorePlaybackProgress() {
         let episodesToProgress = retrieveProgressStorage()
         let url = episode!.url
         if episodesToProgress[url] != nil {
