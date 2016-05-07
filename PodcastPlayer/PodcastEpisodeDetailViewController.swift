@@ -14,6 +14,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     var isPlaying = false
     var player = AVPlayer()
     var playerObserver: AnyObject?
+    let episodePlaybackProgressKey = "episodePlaybackProgress"
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -39,6 +40,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         self.player.replaceCurrentItemWithPlayerItem(playerItem)
         
         self.player.volume = volumeSlider.value
+        restorePlaybackPogress()
         
         playerObserver = self.player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
                                                                         queue: dispatch_get_main_queue())
@@ -49,6 +51,10 @@ class PodcastEpisodeDetailViewController: UIViewController {
                                                          selector: #selector(playbackDidEnd),
                                                          name: AVPlayerItemDidPlayToEndTimeNotification,
                                                          object: playerItem)
+        NSNotificationCenter.defaultCenter().addObserver(self,
+                                                         selector: #selector(savePlaybackPogress),
+                                                         name: UIApplicationDidEnterBackgroundNotification,
+                                                         object: nil)
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -56,6 +62,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
         
         player.removeTimeObserver(playerObserver!)
         NSNotificationCenter.defaultCenter().removeObserver(self)
+        
+        savePlaybackPogress()
     }
     
     
@@ -107,5 +115,37 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     @IBAction func startPlaybackProgressUpdate(sender: AnyObject) {
         isPlaybackProgressSliderTouched = true
+    }
+    
+
+// MARK: load from/save to user defaults
+    
+    /** saves progress percentage per episode url */
+    func savePlaybackPogress() {
+        var episodesToProgress = retrieveProgressStorage()
+        let url = episode!.url
+        episodesToProgress[url] = playbackProgressSlider.value
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setValue(episodesToProgress, forKey: episodePlaybackProgressKey)
+    }
+    
+    func restorePlaybackPogress() {
+        let episodesToProgress = retrieveProgressStorage()
+        let url = episode!.url
+        if episodesToProgress[url] != nil {
+            playbackProgressSlider.value = episodesToProgress[url]!
+            updatePlaybackProgress(self)
+        }
+    }
+    
+    func retrieveProgressStorage() -> Dictionary<String, Float> {
+        // ensure that the respective dictionary is already in the defaults
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if defaults.valueForKey(episodePlaybackProgressKey) == nil {
+            defaults.setValue(Dictionary<String, Float>(), forKey: episodePlaybackProgressKey)
+        }
+        
+        let episodesToProgress = defaults.valueForKey(episodePlaybackProgressKey) as! Dictionary<String, Float>
+        return episodesToProgress
     }
 }
