@@ -18,10 +18,11 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var playbackProgressSlider: UISlider!
     var isPlaybackProgressSliderTouched = false
+    @IBOutlet weak var positionLabel: UILabel!
+    @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var speakerIconView: UILabel!
     
@@ -32,7 +33,6 @@ class PodcastEpisodeDetailViewController: UIViewController {
         self.navigationItem.title = episode?.title
         self.dateLabel.text = episode?.date
         self.descriptionLabel.text = episode?.description
-        self.durationLabel.text = episode?.duration
         
         var url = NSURL(string: episode!.url)
         let result = episode?.prepareEpisodeFilePath()
@@ -43,7 +43,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         self.player.replaceCurrentItemWithPlayerItem(playerItem)
         
         self.player.volume = volumeSlider.value
-        restorePlaybackProgress()
+        updatePlaybackProgressAndDuration()
         
         playerObserver = self.player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
                                                                         queue: dispatch_get_main_queue())
@@ -90,6 +90,14 @@ class PodcastEpisodeDetailViewController: UIViewController {
         speakerIconView.text = volumeSlider.value == 0 ? "" : ""
     }
     
+    func convertTimeToString(totalSeconds: Double) -> String {
+        let hours = Int(totalSeconds / 3600)
+        let minutes = Int(totalSeconds % 3600 / 60)
+        let seconds = Int(totalSeconds % 60)
+        let string = String(format: "%02i:%02i:%02i", hours, minutes, seconds)
+        return string
+    }
+    
 
 // MARK: - playback progress handling
     
@@ -101,6 +109,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         let total = player.currentItem?.asset.duration.seconds
         let new = time.seconds
         playbackProgressSlider.value = Float(new / total!)
+        positionLabel.text = convertTimeToString(new)
     }
     
     func playbackDidEnd(notification: NSNotification) {
@@ -111,8 +120,9 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     @IBAction func updatePlaybackProgress(sender: AnyObject) {
         let total = player.currentItem?.asset.duration.seconds
-        let newPosition = playbackProgressSlider.value * Float(total!)
+        let newPosition = Double(playbackProgressSlider.value) * total!
         player.seekToTime(CMTimeMake(Int64(newPosition), 1))
+        positionLabel.text = convertTimeToString(newPosition)
         isPlaybackProgressSliderTouched = false
     }
     
@@ -132,7 +142,10 @@ class PodcastEpisodeDetailViewController: UIViewController {
         defaults.setValue(episodesToProgress, forKey: episodePlaybackProgressKey)
     }
     
-    func restorePlaybackProgress() {
+    func updatePlaybackProgressAndDuration() {
+        let total = player.currentItem?.asset.duration.seconds
+        durationLabel.text = convertTimeToString(total!)
+        
         let episodesToProgress = retrieveProgressStorage()
         let url = episode!.url
         if episodesToProgress[url] != nil {
