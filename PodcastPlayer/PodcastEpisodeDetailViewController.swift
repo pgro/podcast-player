@@ -87,7 +87,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
             return
         }
         
-        let total = player.currentItem?.duration.seconds
+        let total = player.currentItem?.asset.duration.seconds
         let new = time.seconds
         playbackProgressSlider.value = Float(new / total!)
     }
@@ -99,7 +99,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     }
     
     @IBAction func updatePlaybackProgress(sender: AnyObject) {
-        let total = player.currentItem?.duration.seconds
+        let total = player.currentItem?.asset.duration.seconds
         let newPosition = playbackProgressSlider.value * Float(total!)
         player.seekToTime(CMTimeMake(Int64(newPosition), 1))
         isPlaybackProgressSliderTouched = false
