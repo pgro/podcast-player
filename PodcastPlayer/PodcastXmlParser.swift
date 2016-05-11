@@ -85,10 +85,28 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
                 namespaceURI: String?,
                 qualifiedName qName: String?) {
         if elementName == "item" {
+            formatDateForCurrentEpisode()
             episodes.append(currentEpisode!)
             currentEpisode = nil
         }
         
         currentElementName = nil
+    }
+    
+    
+    /** assumed input format: Mon, 28 Sep 2015 00:30:00 CET
+     * desired output format: 28 Sep 2015 */
+    func formatDateForCurrentEpisode() {
+        guard var date = currentEpisode?.date else {
+            return
+        }
+        
+        let dayIndex = date.characters.indexOf(",")!.advancedBy(2)
+        date = date.substringFromIndex(dayIndex)
+        
+        let yearEndIndex = date.characters.indexOf(":")!.advancedBy(-3)
+        date = date.substringToIndex(yearEndIndex)
+        
+        currentEpisode?.date = date
     }
 }
