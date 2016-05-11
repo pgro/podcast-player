@@ -15,6 +15,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     var player = AVPlayer()
     var playerObserver: AnyObject?
     let episodePlaybackProgressKey = "episodePlaybackProgress"
+    let volumeKey = "volume"
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -44,6 +45,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         
         self.player.volume = volumeSlider.value
         updatePlaybackProgressAndDuration()
+        restoreVolume()
         
         playerObserver = self.player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
                                                                         queue: dispatch_get_main_queue())
@@ -55,7 +57,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
                                                          name: AVPlayerItemDidPlayToEndTimeNotification,
                                                          object: playerItem)
         NSNotificationCenter.defaultCenter().addObserver(self,
-                                                         selector: #selector(savePlaybackProgress),
+                                                         selector: #selector(appDidEnterBackground),
                                                          name: UIApplicationDidEnterBackgroundNotification,
                                                          object: nil)
     }
@@ -67,6 +69,12 @@ class PodcastEpisodeDetailViewController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self)
         
         savePlaybackProgress()
+        saveVolume()
+    }
+    
+    func appDidEnterBackground() {
+        savePlaybackProgress()
+        saveVolume()
     }
     
     
@@ -171,5 +179,21 @@ class PodcastEpisodeDetailViewController: UIViewController {
         
         let episodesToProgress = defaults.valueForKey(episodePlaybackProgressKey) as! Dictionary<String, Float>
         return episodesToProgress
+    }
+    
+    
+// MARK: -
+    
+    func saveVolume() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setValue(volumeSlider.value, forKey: volumeKey)
+    }
+    
+    func restoreVolume() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if defaults.valueForKey(volumeKey) != nil {
+            volumeSlider.value = defaults.valueForKey(volumeKey) as! Float
+            changeVolume(self)
+        }
     }
 }
