@@ -13,7 +13,7 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var statusView: UIView!
-    @IBOutlet weak var downloadButton: UIButton!
+    @IBOutlet weak var fileActionButton: UIButton!
     @IBOutlet weak var downloadingIndicator: UIActivityIndicatorView!
     
     var episode: Episode? {
@@ -24,7 +24,7 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     }
 
     
-    @IBAction func downloadEpisode(sender: AnyObject) {
+    @IBAction func doEpisodeFileAction(sender: AnyObject) {
         switch episode!.status {
         case .NotStarted:
             episode?.download()
@@ -49,19 +49,19 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
         switch episode!.status {
         case .NotStarted:
             statusView.backgroundColor = UIColor.redColor()
-            downloadButton.hidden = false
-            downloadButton.setTitle("", forState: .Normal)
+            fileActionButton.hidden = false
+            fileActionButton.setTitle("", forState: .Normal)
             downloadingIndicator.stopAnimating()
             break
         case .InProgress:
             statusView.backgroundColor = UIColor.yellowColor()
-            downloadButton.hidden = true
+            fileActionButton.hidden = true
             downloadingIndicator.startAnimating()
             break
         case .Finished:
             statusView.backgroundColor = UIColor.greenColor()
-            downloadButton.hidden = false
-            downloadButton.setTitle("", forState: .Normal)
+            fileActionButton.hidden = false
+            fileActionButton.setTitle("", forState: .Normal)
             downloadingIndicator.stopAnimating()
             break
         }

@@ -87,7 +87,7 @@
                                             <inset key="contentEdgeInsets" minX="0.0" minY="-20" maxX="0.0" maxY="0.0"/>
                                             <state key="normal" title=""/>
                                             <connections>
-                                                <action selector="downloadEpisode:" destination="ZvQ-5B-mGd" eventType="touchUpInside" id="NbR-0I-Pzj"/>
+                                                <action selector="doEpisodeFileAction:" destination="ZvQ-5B-mGd" eventType="touchUpInside" id="NbR-0I-Pzj"/>
                                             </connections>
                                         </button>
                                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="KEC-MB-zEd">
@@ -133,8 +133,8 @@
                                 <connections>
                                     <outlet property="dateLabel" destination="Hu8-wa-X0u" id="4dM-8T-HOT"/>
                                     <outlet property="descriptionLabel" destination="68C-3L-dX7" id="etB-lI-m8G"/>
-                                    <outlet property="downloadButton" destination="m9O-hM-Wy6" id="ffU-vM-CSx"/>
                                     <outlet property="downloadingIndicator" destination="KEC-MB-zEd" id="Lgc-fh-ymK"/>
+                                    <outlet property="fileActionButton" destination="m9O-hM-Wy6" id="ffU-vM-CSx"/>
                                     <outlet property="statusView" destination="yfR-Iq-j6U" id="xv6-73-4ZO"/>
                                     <outlet property="titleLabel" destination="P2I-Yv-TIB" id="U9S-fl-gGj"/>
                                     <segue destination="l7D-lh-Lkg" kind="show" identifier="showEpisodeDetailSegue" id="Wgw-SH-TcL"/>
