@@ -104,6 +104,22 @@ class Episode {
         }
     }
     
+    func delete() {
+        if status != .Finished {
+            // file not available -> nothing to do
+            return
+        }
+        
+        let pathResult = prepareEpisodeFilePath()
+        assert(pathResult.status == .Exists, "file must exist")
+        do {
+            try NSFileManager.defaultManager().removeItemAtPath(pathResult.path!)
+            status = .NotStarted
+        } catch {
+            debugPrint(error)
+        }
+    }
+    
 
     // MARK: - episode file path handling
     

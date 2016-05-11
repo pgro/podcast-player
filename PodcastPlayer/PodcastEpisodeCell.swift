@@ -25,7 +25,16 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
 
     
     @IBAction func downloadEpisode(sender: AnyObject) {
-        episode?.download()
+        switch episode!.status {
+        case .NotStarted:
+            episode?.download()
+            break
+        case .Finished:
+            episode?.delete()
+            break
+        default:
+            break
+        }
     }
     
 
@@ -41,6 +50,7 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
         case .NotStarted:
             statusView.backgroundColor = UIColor.redColor()
             downloadButton.hidden = false
+            downloadButton.setTitle("", forState: .Normal)
             downloadingIndicator.stopAnimating()
             break
         case .InProgress:
@@ -50,7 +60,8 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
             break
         case .Finished:
             statusView.backgroundColor = UIColor.greenColor()
-            downloadButton.hidden = true
+            downloadButton.hidden = false
+            downloadButton.setTitle("", forState: .Normal)
             downloadingIndicator.stopAnimating()
             break
         }
