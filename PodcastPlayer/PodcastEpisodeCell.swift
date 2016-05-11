@@ -50,7 +50,7 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
         case .NotStarted:
             statusView.backgroundColor = UIColor.redColor()
             fileActionButton.hidden = false
-            fileActionButton.setTitle("", forState: .Normal)
+            fileActionButton.setTitle("", forState: .Normal) // set download icon via Font Awesome
             downloadingIndicator.stopAnimating()
             break
         case .InProgress:
@@ -61,7 +61,7 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
         case .Finished:
             statusView.backgroundColor = UIColor.greenColor()
             fileActionButton.hidden = false
-            fileActionButton.setTitle("", forState: .Normal)
+            fileActionButton.setTitle("", forState: .Normal) // set trash icon via Font Awesome
             downloadingIndicator.stopAnimating()
             break
         }
