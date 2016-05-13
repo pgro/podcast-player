@@ -89,13 +89,7 @@ class Episode {
             self.status = success ? DownloadStatus.Finished
                                   : DownloadStatus.NotStarted
             if success {
-                // exclude downloaded file from iCloud backup
-                do {
-                    let fileUrl = NSURL(fileURLWithPath: self.filePath)
-                    try fileUrl.setResourceValue(NSNumber(bool: true), forKey: NSURLIsExcludedFromBackupKey)
-                } catch {
-                    debugPrint(error)
-                }
+                self.excludeFromBackup()
             }
         }
     }
@@ -131,20 +125,7 @@ class Episode {
         let folderPath = folderPathForEpisodes()
         filePath = folderPath.stringByAppendingString("/" + fileName)
         
-        if fileExists() {
-            do {
-                let fileUrl = NSURL(fileURLWithPath: filePath)
-                var value: AnyObject?
-                try fileUrl.getResourceValue(&value, forKey: NSURLIsExcludedFromBackupKey)
-                let isExcluded = value as? NSNumber
-                assert(isExcluded != nil && isExcluded!.boolValue,
-                       "downloaded podcast episode must be excluded from iCloud backup")
-            } catch {
-                debugPrint(error)
-            }
-            
-            return
-        }
+        assureBackupExclusion()
         
         // create folder if needed
         do {
@@ -154,5 +135,32 @@ class Episode {
             debugPrint(error)
         }
     }
-
+    
+    /** Assures that the episode file (if existing) is excluded from iCloud backup. */
+    func assureBackupExclusion() {
+        if !fileExists() {
+            return
+        }
+        
+        do {
+            let fileUrl = NSURL(fileURLWithPath: filePath)
+            var value: AnyObject?
+            try fileUrl.getResourceValue(&value, forKey: NSURLIsExcludedFromBackupKey)
+            let isExcluded = value as? NSNumber
+            assert(isExcluded != nil && isExcluded!.boolValue,
+                   "downloaded podcast episode must be excluded from iCloud backup")
+        } catch {
+            debugPrint(error)
+        }
+    }
+    
+    /** Excludes the (downloaded) file from iCloud backup. */
+    func excludeFromBackup() {
+        do {
+            let fileUrl = NSURL(fileURLWithPath: self.filePath)
+            try fileUrl.setResourceValue(NSNumber(bool: true), forKey: NSURLIsExcludedFromBackupKey)
+        } catch {
+            debugPrint(error)
+        }
+    }
 }
