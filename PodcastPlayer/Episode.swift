@@ -42,29 +42,9 @@ class Episode {
         }
     }
     weak var delegate: EpisodeDelegate?
-    
-    
-    /** Retrieves the unique file name for the current url from user defaults.
-        Creates that in case of a previously unknown episode url. */
-    func prepareFileName() {
-        if url.isEmpty {
-            return
-        }
-        
-        let episodesToFilesMappingKey = "episodesAndTheirFiles"
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.valueForKey(episodesToFilesMappingKey) == nil {
-            defaults.setValue(Dictionary<String, String>(), forKey: episodesToFilesMappingKey)
-        }
-        var episodesToFiles = defaults.valueForKey(episodesToFilesMappingKey) as! Dictionary<String, String>
-        
-        if episodesToFiles[url] == nil {
-            episodesToFiles[url] = NSUUID().UUIDString + "." + (NSURL(string: url)?.pathExtension)!
-            defaults.setValue(episodesToFiles, forKey: episodesToFilesMappingKey)
-        }
-        fileName = episodesToFiles[url]!
-    }
-    
+
+
+// MARK: - actions with file
     
     func download() {
         if status == DownloadStatus.InProgress {
@@ -109,6 +89,30 @@ class Episode {
         }
     }
 
+
+// MARK: - file path handling
+    
+    /** Retrieves the unique file name for the current url from user defaults.
+     Creates that in case of a previously unknown episode url. */
+    func prepareFileName() {
+        if url.isEmpty {
+            return
+        }
+        
+        let episodesToFilesMappingKey = "episodesAndTheirFiles"
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if defaults.valueForKey(episodesToFilesMappingKey) == nil {
+            defaults.setValue(Dictionary<String, String>(), forKey: episodesToFilesMappingKey)
+        }
+        var episodesToFiles = defaults.valueForKey(episodesToFilesMappingKey) as! Dictionary<String, String>
+        
+        if episodesToFiles[url] == nil {
+            episodesToFiles[url] = NSUUID().UUIDString + "." + (NSURL(string: url)?.pathExtension)!
+            defaults.setValue(episodesToFiles, forKey: episodesToFilesMappingKey)
+        }
+        fileName = episodesToFiles[url]!
+    }
+
     
     func folderPathForEpisodes() -> String {
         var folderPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
@@ -135,7 +139,10 @@ class Episode {
             debugPrint(error)
         }
     }
-    
+
+
+// MARK: - iCloud backup exclusion
+
     /** Assures that the episode file (if existing) is excluded from iCloud backup. */
     func assureBackupExclusion() {
         if !fileExists() {
