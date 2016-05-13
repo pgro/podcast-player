@@ -25,14 +25,15 @@ class Episode {
     var url = "" {
         didSet {
             prepareFileName()
-            status = prepareEpisodeFilePath().status == PathStatus.Exists
-                                                ? DownloadStatus.Finished
-                                                : DownloadStatus.NotStarted
+            prepareFilePath()
+            status = fileExists() ? DownloadStatus.Finished
+                                  : DownloadStatus.NotStarted
         }
     }
     var date = ""
     var duration = ""
     var fileName = ""
+    var filePath = ""
     var status = DownloadStatus.NotStarted {
         didSet {
             dispatch_async(dispatch_get_main_queue()) {
@@ -74,13 +75,8 @@ class Episode {
         /* download selected podcast episode (if necessary)
          * and update the cell status accordingly */
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            let result = self.prepareEpisodeFilePath()
-            if result.status == PathStatus.Exists {
+            if self.fileExists() {
                 self.status = DownloadStatus.Finished
-                return
-            }
-            if result.status == PathStatus.Error {
-                self.status = DownloadStatus.NotStarted
                 return
             }
             
@@ -89,13 +85,13 @@ class Episode {
                 self.status = DownloadStatus.NotStarted
                 return
             }
-            let success = episodeFileData.writeToFile(result.path!, atomically: true)
+            let success = episodeFileData.writeToFile(self.filePath, atomically: true)
             self.status = success ? DownloadStatus.Finished
                                   : DownloadStatus.NotStarted
             if success {
                 // exclude downloaded file from iCloud backup
                 do {
-                    let fileUrl = NSURL(fileURLWithPath: result.path!)
+                    let fileUrl = NSURL(fileURLWithPath: self.filePath)
                     try fileUrl.setResourceValue(NSNumber(bool: true), forKey: NSURLIsExcludedFromBackupKey)
                 } catch {
                     debugPrint(error)
@@ -110,18 +106,15 @@ class Episode {
             return
         }
         
-        let pathResult = prepareEpisodeFilePath()
-        assert(pathResult.status == .Exists, "file must exist")
+        assert(fileExists(), "file must exist")
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(pathResult.path!)
+            try NSFileManager.defaultManager().removeItemAtPath(filePath)
             status = .NotStarted
         } catch {
             debugPrint(error)
         }
     }
-    
 
-    // MARK: - episode file path handling
     
     func folderPathForEpisodes() -> String {
         var folderPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
@@ -129,23 +122,18 @@ class Episode {
         return folderPath
     }
     
-    
-    enum PathStatus {
-        case Error
-        case Exists
-        case IsFree
+    func fileExists() -> Bool {
+        let fileManager = NSFileManager.defaultManager()
+        return fileManager.fileExistsAtPath(filePath)
     }
     
-    /** Returns the target path for download when it is available
-     or nil if an error occured. */
-    func prepareEpisodeFilePath() -> (status: PathStatus, path: String?) {
+    func prepareFilePath() {
         let folderPath = folderPathForEpisodes()
-        let path = folderPath.stringByAppendingString("/" + fileName)
+        filePath = folderPath.stringByAppendingString("/" + fileName)
         
-        let fileManager = NSFileManager.defaultManager()
-        if fileManager.fileExistsAtPath(path) {
+        if fileExists() {
             do {
-                let fileUrl = NSURL(fileURLWithPath: path)
+                let fileUrl = NSURL(fileURLWithPath: filePath)
                 var value: AnyObject?
                 try fileUrl.getResourceValue(&value, forKey: NSURLIsExcludedFromBackupKey)
                 let isExcluded = value as? NSNumber
@@ -155,17 +143,16 @@ class Episode {
                 debugPrint(error)
             }
             
-            return (PathStatus.Exists, path)
+            return
         }
         
+        // create folder if needed
         do {
+            let fileManager = NSFileManager.defaultManager()
             try fileManager.createDirectoryAtPath(folderPath, withIntermediateDirectories: true, attributes: nil)
         } catch {
             debugPrint(error)
-            return (PathStatus.Error, nil)
         }
-        
-        return (PathStatus.IsFree, path)
     }
 
 }

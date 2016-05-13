@@ -36,9 +36,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
         self.descriptionLabel.text = episode?.description
         
         var url = NSURL(string: episode!.url)
-        let result = episode?.prepareEpisodeFilePath()
-        if result?.status == .Exists {
-            url = NSURL(fileURLWithPath: result!.path!)
+        if episode!.fileExists() {
+            url = NSURL(fileURLWithPath: episode!.filePath)
         }
         let playerItem = AVPlayerItem(URL: url!)
         self.player.replaceCurrentItemWithPlayerItem(playerItem)
