@@ -38,4 +38,19 @@ class PodcastPlayerTests: XCTestCase {
         XCTAssertFalse(episode1.fileName.isEmpty)
     }
     
+    func testPlaybackProgressSaving() {
+        let progress: Float = 0.123456
+        
+        let episode1 = Episode()
+        episode1.url = testUrl
+        
+        let settings = SettingsManager(episodeUrl: testUrl)
+        settings.savePlaybackProgress(progress)
+        
+        XCTAssertEqual(episode1.settings?.loadPlaybackProgress(),
+                       settings.loadPlaybackProgress())
+        XCTAssertEqual(progress,
+                       settings.loadPlaybackProgress())
+    }
+    
 }
