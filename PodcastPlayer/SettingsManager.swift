@@ -9,7 +9,7 @@
 import Foundation
 
 
-typealias DictionaryOfDictionaries = Dictionary<String, Dictionary<String, String>>
+typealias DictionaryOfDictionaries = Dictionary<String, Dictionary<String, AnyObject>>
 
 /*
  Settings for episodes are mapped like this:
@@ -43,7 +43,7 @@ class SettingsManager {
             saveEpisodeEntry(episodeEntry)
         }
         
-        let fileName = episodeEntry[fileNameKey]!
+        let fileName = episodeEntry[fileNameKey] as! String
         return fileName
     }
     
@@ -51,18 +51,17 @@ class SettingsManager {
     func loadPlaybackProgress() -> Float {
         var episodeEntry = loadEpisodeEntry()
         if episodeEntry[playbackProgressKey] == nil {
-            episodeEntry[playbackProgressKey] = "0"
+            episodeEntry[playbackProgressKey] = Float(0)
             saveEpisodeEntry(episodeEntry)
         }
         
-        let progressString = episodeEntry[playbackProgressKey]!
-        let progress = Float(progressString)!
+        let progress = episodeEntry[playbackProgressKey] as! Float
         return progress
     }
     
     func savePlaybackProgress(value: Float) {
         var episodeEntry = loadEpisodeEntry()
-        episodeEntry[playbackProgressKey] = String(value)
+        episodeEntry[playbackProgressKey] = value
         saveEpisodeEntry(episodeEntry)
     }
     
