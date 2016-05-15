@@ -96,7 +96,7 @@ class SettingsManager {
         return episodes[episodeUrl]!
     }
     
-    private func saveEpisodeEntry(entry: DictionaryOfDictionaries.Value) {
+    func saveEpisodeEntry(entry: DictionaryOfDictionaries.Value) {
         var episodes = loadRootEntry()
         episodes[episodeUrl] = entry
         saveRootEntry(episodes)

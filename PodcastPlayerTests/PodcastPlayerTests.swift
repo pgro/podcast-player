@@ -11,10 +11,14 @@ import XCTest
 
 
 class PodcastPlayerTests: XCTestCase {
+    let testUrl = "http://test.xyz/abc.mp3"
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        // clear settings
+        let settings = SettingsManager(episodeUrl: testUrl)
+        settings.saveEpisodeEntry(DictionaryOfDictionaries.Value())
     }
     
     override func tearDown() {
@@ -24,7 +28,6 @@ class PodcastPlayerTests: XCTestCase {
     
     func testEpisodeFileNameSaving() {
         // the file name must be the same for the same url during different retrievals
-        let testUrl = "http://test.xyz/abc.mp3"
         
         let episode1 = Episode()
         episode1.url = testUrl
