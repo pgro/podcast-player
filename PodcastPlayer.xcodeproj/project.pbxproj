@@ -18,6 +18,7 @@
 		2673C0101CD3C0A8009CC7FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2673C00E1CD3C0A8009CC7FB /* LaunchScreen.storyboard */; };
 		2673C0181CD3CE1B009CC7FB /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2673C0171CD3CE1B009CC7FB /* Episode.swift */; };
 		2673C01A1CD3E4FB009CC7FB /* PodcastXmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2673C0191CD3E4FB009CC7FB /* PodcastXmlParser.swift */; };
+		2686C48E1CE74D9A00336D0B /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2686C48D1CE74D9A00336D0B /* SettingsManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		2673C0111CD3C0A8009CC7FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2673C0171CD3CE1B009CC7FB /* Episode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 		2673C0191CD3E4FB009CC7FB /* PodcastXmlParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodcastXmlParser.swift; sourceTree = "<group>"; };
+		2686C48D1CE74D9A00336D0B /* SettingsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 			isa = PBXGroup;
 			children = (
 				2673C0171CD3CE1B009CC7FB /* Episode.swift */,
+				2686C48D1CE74D9A00336D0B /* SettingsManager.swift */,
 				2673C0191CD3E4FB009CC7FB /* PodcastXmlParser.swift */,
 			);
 			name = Model;
@@ -174,6 +177,7 @@
 				264933C71CD4A55100FD5340 /* PodcastEpisodeCell.swift in Sources */,
 				264162DA1CDBB6F100B41E7B /* PodcastEpisodeDetailViewController.swift in Sources */,
 				2673C01A1CD3E4FB009CC7FB /* PodcastXmlParser.swift in Sources */,
+				2686C48E1CE74D9A00336D0B /* SettingsManager.swift in Sources */,
 				26082C3F1CD6084F00583FF1 /* MainViewController.swift in Sources */,
 				2673C0181CD3CE1B009CC7FB /* Episode.swift in Sources */,
 				2673C0061CD3C0A8009CC7FB /* AppDelegate.swift in Sources */,
