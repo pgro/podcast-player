@@ -31,7 +31,7 @@ class PodcastPlayerTests: XCTestCase {
         
         let settings = SettingsManager(episodeUrl: testUrl)
         
-        XCTAssertEqual(episode1.fileName, settings.retrieveFileName())
+        XCTAssertEqual(episode1.fileName, settings.loadFileName())
         XCTAssertFalse(episode1.fileName.isEmpty)
     }
     

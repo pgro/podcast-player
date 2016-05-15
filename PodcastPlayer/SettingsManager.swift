@@ -22,6 +22,7 @@ typealias DictionaryOfDictionaries = Dictionary<String, Dictionary<String, Strin
 
 class SettingsManager {
     let episodeUrl: String
+    private let episodesRootKey = "episodesSettings"
     
     init(episodeUrl: String) {
         assert(!episodeUrl.isEmpty, "url must not be empty")
@@ -29,29 +30,12 @@ class SettingsManager {
     }
     
     
-    func retrieveRootEntry() ->DictionaryOfDictionaries.Value {
-        let episodesRootKey = "episodesSettings"
-        
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.valueForKey(episodesRootKey) == nil {
-            defaults.setValue(DictionaryOfDictionaries(), forKey: episodesRootKey)
-        }
-        
-        // maps episodes by their stream urls to a dictionary with settings for each
-        var episodes = defaults.valueForKey(episodesRootKey) as! DictionaryOfDictionaries
-        
-        if episodes[episodeUrl] == nil {
-            episodes[episodeUrl] = DictionaryOfDictionaries.Value()
-        }
-        return episodes[episodeUrl]!
-    }
-    
     /** Retrieves the unique file name for the current url.
-        Creates it in case of a previously unknown url. */
-    func retrieveFileName() -> String {
+        Creates (and saves) it in case of a previously unknown url. */
+    func loadFileName() -> String {
         let fileNameKey = "fileName"
         
-        var episodeEntry = retrieveRootEntry()
+        var episodeEntry = loadEpisodeEntry()
         if episodeEntry[fileNameKey] == nil {
             episodeEntry[fileNameKey] = NSUUID().UUIDString + "." +
                                         NSURL(string: episodeUrl)!.pathExtension!
@@ -59,5 +43,31 @@ class SettingsManager {
         
         let fileName = episodeEntry[fileNameKey]!
         return fileName
+    }
+    
+    
+// MARK: - root and episode settings entry
+    
+    private func loadRootEntry() ->DictionaryOfDictionaries {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if defaults.valueForKey(episodesRootKey) == nil {
+            defaults.setValue(DictionaryOfDictionaries(), forKey: episodesRootKey)
+        }
+        
+        // maps episodes by their stream urls to a dictionary with settings for each
+        let episodes = defaults.valueForKey(episodesRootKey) as! DictionaryOfDictionaries
+        
+        return episodes
+    }
+    
+    private func loadEpisodeEntry() ->DictionaryOfDictionaries.Value {
+        var episodes = loadRootEntry()
+        
+        if episodes[episodeUrl] == nil {
+            episodes[episodeUrl] = DictionaryOfDictionaries.Value()
+        }
+        return episodes[episodeUrl]!
+    }
+    
     }
 }

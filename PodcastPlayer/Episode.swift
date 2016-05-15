@@ -25,7 +25,7 @@ class Episode {
     var url = "" {
         didSet {
             let settings = SettingsManager(episodeUrl: url)
-            fileName = settings.retrieveFileName()
+            fileName = settings.loadFileName()
             prepareFilePath()
             status = fileExists() ? DownloadStatus.Finished
                                   : DownloadStatus.NotStarted
