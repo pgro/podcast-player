@@ -7,6 +7,8 @@
 //
 
 import XCTest
+@testable import PodcastPlayer
+
 
 class PodcastPlayerTests: XCTestCase {
     
@@ -20,16 +22,17 @@ class PodcastPlayerTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
+    func testEpisodeFileNameSaving() {
+        // the file name must be the same for the same url during different retrievals
+        let testUrl = "http://test.xyz/abc.mp3"
+        
+        let episode1 = Episode()
+        episode1.url = testUrl
+        
+        let settings = SettingsManager(episodeUrl: testUrl)
+        
+        XCTAssertEqual(episode1.fileName, settings.retrieveFileName())
+        XCTAssertFalse(episode1.fileName.isEmpty)
     }
     
 }
