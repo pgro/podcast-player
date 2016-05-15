@@ -10,11 +10,16 @@ import UIKit
 
 class PodcastEpisodesViewController: UICollectionViewController {
     var episodes = Array<Episode>()
+    let cellMargin = CGFloat(10)
     weak var waitingIndicator: UIActivityIndicatorView?
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let layout = collectionViewLayout as! UICollectionViewFlowLayout
+        layout.sectionInset = UIEdgeInsetsMake(cellMargin, cellMargin, cellMargin, cellMargin)
+        
         loadEpisodes()
     }
     
@@ -69,6 +74,12 @@ class PodcastEpisodesViewController: UICollectionViewController {
     func collectionView(collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSizeMake(collectionView.bounds.size.width, CGFloat(85))
+        let totalWidth = collectionView.bounds.size.width
+        let maxCellWidth = CGFloat(300)
+        let columns = floor(totalWidth / maxCellWidth)
+        let totalMargin = (columns + CGFloat(1)) * cellMargin
+        let cellWidth = (totalWidth - totalMargin) / columns
+        let size = CGSizeMake(cellWidth, CGFloat(85))
+        return size
     }
 }
