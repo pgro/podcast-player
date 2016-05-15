@@ -39,6 +39,7 @@ class SettingsManager {
         if episodeEntry[fileNameKey] == nil {
             episodeEntry[fileNameKey] = NSUUID().UUIDString + "." +
                                         NSURL(string: episodeUrl)!.pathExtension!
+            saveEpisodeEntry(episodeEntry)
         }
         
         let fileName = episodeEntry[fileNameKey]!
@@ -60,6 +61,12 @@ class SettingsManager {
         return episodes
     }
     
+    private func saveRootEntry(entry: DictionaryOfDictionaries) {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setValue(entry, forKey: episodesRootKey)
+    }
+    
+    
     private func loadEpisodeEntry() ->DictionaryOfDictionaries.Value {
         var episodes = loadRootEntry()
         
@@ -69,5 +76,9 @@ class SettingsManager {
         return episodes[episodeUrl]!
     }
     
+    private func saveEpisodeEntry(entry: DictionaryOfDictionaries.Value) {
+        var episodes = loadRootEntry()
+        episodes[episodeUrl] = entry
+        saveRootEntry(episodes)
     }
 }
