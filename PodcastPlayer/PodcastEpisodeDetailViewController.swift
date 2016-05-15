@@ -14,7 +14,6 @@ class PodcastEpisodeDetailViewController: UIViewController {
     var isPlaying = false
     var player = AVPlayer()
     var playerObserver: AnyObject?
-    let episodePlaybackProgressKey = "episodePlaybackProgress"
     let volumeKey = "volume"
     
     @IBOutlet weak var dateLabel: UILabel!
@@ -142,11 +141,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     /** saves progress percentage per episode url */
     func savePlaybackProgress() {
-        var episodesToProgress = retrieveProgressStorage()
-        let url = episode!.url
-        episodesToProgress[url] = playbackProgressSlider.value
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setValue(episodesToProgress, forKey: episodePlaybackProgressKey)
+        episode?.settings?.savePlaybackProgress(playbackProgressSlider.value)
     }
     
     func updatePlaybackProgressAndDuration() {
@@ -155,29 +150,18 @@ class PodcastEpisodeDetailViewController: UIViewController {
              * when the asset needs to be retrieved from a remote URL */
             let total = self.player.currentItem?.asset.duration.seconds
             
-            let episodesToProgress = self.retrieveProgressStorage()
-            let url = self.episode!.url
-            
             dispatch_async(dispatch_get_main_queue()) {
                 self.durationLabel.text = self.convertTimeToString(total!)
                 
-                if episodesToProgress[url] != nil {
-                    self.playbackProgressSlider.value = episodesToProgress[url]!
-                    self.updatePlaybackProgress(self)
-                }
+                self.playbackProgressSlider.value = self.retrievePlaybackProgress()
+                self.updatePlaybackProgress(self)
             }
         }
     }
     
-    func retrieveProgressStorage() -> Dictionary<String, Float> {
-        // ensure that the respective dictionary is already in the defaults
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.valueForKey(episodePlaybackProgressKey) == nil {
-            defaults.setValue(Dictionary<String, Float>(), forKey: episodePlaybackProgressKey)
-        }
-        
-        let episodesToProgress = defaults.valueForKey(episodePlaybackProgressKey) as! Dictionary<String, Float>
-        return episodesToProgress
+    func retrievePlaybackProgress() -> Float {
+        let progress = episode?.settings?.loadPlaybackProgress()
+        return progress!
     }
     
     

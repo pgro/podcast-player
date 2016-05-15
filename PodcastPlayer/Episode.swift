@@ -24,8 +24,8 @@ class Episode {
     var description = ""
     var url = "" {
         didSet {
-            let settings = SettingsManager(episodeUrl: url)
-            fileName = settings.loadFileName()
+            settings = SettingsManager(episodeUrl: url)
+            fileName = settings!.loadFileName()
             prepareFilePath()
             status = fileExists() ? DownloadStatus.Finished
                                   : DownloadStatus.NotStarted
@@ -43,6 +43,7 @@ class Episode {
         }
     }
     weak var delegate: EpisodeDelegate?
+    var settings: SettingsManager?
 
 
 // MARK: - actions with file

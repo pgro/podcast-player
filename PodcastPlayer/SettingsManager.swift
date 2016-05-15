@@ -23,6 +23,7 @@ typealias DictionaryOfDictionaries = Dictionary<String, Dictionary<String, Strin
 class SettingsManager {
     let episodeUrl: String
     private let episodesRootKey = "episodesSettings"
+    private let playbackProgressKey = "relativePlaybackProgress"
     
     init(episodeUrl: String) {
         assert(!episodeUrl.isEmpty, "url must not be empty")
@@ -44,6 +45,25 @@ class SettingsManager {
         
         let fileName = episodeEntry[fileNameKey]!
         return fileName
+    }
+    
+    
+    func loadPlaybackProgress() -> Float {
+        var episodeEntry = loadEpisodeEntry()
+        if episodeEntry[playbackProgressKey] == nil {
+            episodeEntry[playbackProgressKey] = "0"
+            saveEpisodeEntry(episodeEntry)
+        }
+        
+        let progressString = episodeEntry[playbackProgressKey]!
+        let progress = Float(progressString)!
+        return progress
+    }
+    
+    func savePlaybackProgress(value: Float) {
+        var episodeEntry = loadEpisodeEntry()
+        episodeEntry[playbackProgressKey] = String(value)
+        saveEpisodeEntry(episodeEntry)
     }
     
     
