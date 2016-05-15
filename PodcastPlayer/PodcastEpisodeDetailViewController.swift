@@ -25,6 +25,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var speakerIconView: UILabel!
+    @IBOutlet weak var waitingIndicator: UIActivityIndicatorView!
     
     
     override func viewDidLoad() {
@@ -155,6 +156,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
                 
                 self.playbackProgressSlider.value = self.retrievePlaybackProgress()
                 self.updatePlaybackProgress(self)
+                
+                self.waitingIndicator.stopAnimating()
             }
         }
     }

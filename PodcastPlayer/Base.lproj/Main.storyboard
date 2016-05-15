@@ -198,6 +198,9 @@
                                             <action selector="togglePlayback:" destination="l7D-lh-Lkg" eventType="touchUpInside" id="Evv-Ml-dUR"/>
                                         </connections>
                                     </button>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="RUU-Sz-aue">
+                                        <rect key="frame" x="280" y="15" width="20" height="20"/>
+                                    </activityIndicatorView>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="QlF-AV-ASa">
                                         <rect key="frame" x="48" y="25" width="534" height="31"/>
                                         <connections>
@@ -240,10 +243,12 @@
                                 <constraints>
                                     <constraint firstItem="ttd-HI-EcN" firstAttribute="leading" secondItem="ERu-eD-WJ9" secondAttribute="leading" constant="10" id="7WS-tQ-4vk"/>
                                     <constraint firstItem="k8Q-Wd-kAU" firstAttribute="leading" secondItem="ERu-eD-WJ9" secondAttribute="leading" id="A0L-tg-uPg"/>
+                                    <constraint firstItem="RUU-Sz-aue" firstAttribute="centerX" secondItem="ERu-eD-WJ9" secondAttribute="centerX" id="B4N-Vh-pmi"/>
                                     <constraint firstItem="V9R-VI-B33" firstAttribute="centerY" secondItem="ttd-HI-EcN" secondAttribute="centerY" id="BJ2-Rw-xOG"/>
                                     <constraint firstItem="QlF-AV-ASa" firstAttribute="leading" secondItem="k8Q-Wd-kAU" secondAttribute="trailing" constant="10" id="EGR-mH-rTW"/>
                                     <constraint firstItem="QlF-AV-ASa" firstAttribute="centerY" secondItem="k8Q-Wd-kAU" secondAttribute="centerY" id="ETm-Bm-3j4"/>
                                     <constraint firstItem="ttd-HI-EcN" firstAttribute="top" secondItem="QlF-AV-ASa" secondAttribute="bottom" constant="60" id="EYz-M8-aqc"/>
+                                    <constraint firstItem="RUU-Sz-aue" firstAttribute="bottom" secondItem="QlF-AV-ASa" secondAttribute="top" constant="10" id="EzI-OI-znv"/>
                                     <constraint firstItem="QlF-AV-ASa" firstAttribute="leading" secondItem="ERu-eD-WJ9" secondAttribute="leading" constant="10" id="LSc-Kv-QzA"/>
                                     <constraint firstItem="Ffr-PA-huu" firstAttribute="trailing" secondItem="QlF-AV-ASa" secondAttribute="trailing" id="Xtk-17-EPI"/>
                                     <constraint firstItem="5lR-DL-ffD" firstAttribute="top" secondItem="QlF-AV-ASa" secondAttribute="bottom" id="aSr-nm-w46"/>
@@ -294,6 +299,7 @@
                         <outlet property="positionLabel" destination="5lR-DL-ffD" id="HKh-se-jWn"/>
                         <outlet property="speakerIconView" destination="ttd-HI-EcN" id="kJ4-yD-x9O"/>
                         <outlet property="volumeSlider" destination="V9R-VI-B33" id="pvb-08-Vhg"/>
+                        <outlet property="waitingIndicator" destination="RUU-Sz-aue" id="VbO-Sn-G9a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JSf-Le-v06" userLabel="First Responder" sceneMemberID="firstResponder"/>
