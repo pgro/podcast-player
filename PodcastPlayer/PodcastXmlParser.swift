@@ -97,16 +97,21 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
     /** assumed input format: Mon, 28 Sep 2015 00:30:00 CET
      * desired output format: 28 Sep 2015 */
     func formatDateForCurrentEpisode() {
-        guard var date = currentEpisode?.date else {
+        guard var dateString = currentEpisode?.date else {
             return
         }
         
-        let dayIndex = date.characters.indexOf(",")!.advancedBy(2)
-        date = date.substringFromIndex(dayIndex)
+        let dayIndex = dateString.characters.indexOf(",")!.advancedBy(2)
+        dateString = dateString.substringFromIndex(dayIndex)
         
-        let yearEndIndex = date.characters.indexOf(":")!.advancedBy(-3)
-        date = date.substringToIndex(yearEndIndex)
+        let yearEndIndex = dateString.characters.indexOf(":")!.advancedBy(-3)
+        dateString = dateString.substringToIndex(yearEndIndex)
         
-        currentEpisode?.date = date
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "dd LLL yyyy"
+        let date = formatter.dateFromString(dateString)!
+        
+        formatter.dateFormat = "yyyy-MM-dd"
+        currentEpisode?.date = formatter.stringFromDate(date)
     }
 }
