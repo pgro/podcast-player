@@ -29,6 +29,7 @@ class Episode {
             prepareFilePath()
             status = fileExists() ? DownloadStatus.Finished
                                   : DownloadStatus.NotStarted
+            isRemoved = settings!.loadIsRemoved()
         }
     }
     var date = ""
@@ -44,6 +45,11 @@ class Episode {
     }
     weak var delegate: EpisodeDelegate?
     var settings: SettingsManager?
+    var isRemoved = false {
+        didSet {
+            settings?.saveIsRemoved(isRemoved)
+        }
+    }
 
 
 // MARK: - actions with file
@@ -62,6 +68,7 @@ class Episode {
                 return
             }
             
+            self.isRemoved = false
             self.status = DownloadStatus.InProgress
             guard let episodeFileData = NSData(contentsOfURL: NSURL(string: self.url)!) else {
                 self.status = DownloadStatus.NotStarted
@@ -86,6 +93,7 @@ class Episode {
         do {
             try NSFileManager.defaultManager().removeItemAtPath(filePath)
             status = .NotStarted
+            isRemoved = true
         } catch {
             debugPrint(error)
         }

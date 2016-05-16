@@ -24,6 +24,7 @@ class SettingsManager {
     let episodeUrl: String
     private let episodesRootKey = "episodesSettings"
     private let playbackProgressKey = "relativePlaybackProgress"
+    private let isRemovedKey = "isRemoved"
     
     init(episodeUrl: String) {
         assert(!episodeUrl.isEmpty, "url must not be empty")
@@ -62,6 +63,23 @@ class SettingsManager {
     func savePlaybackProgress(value: Float) {
         var episodeEntry = loadEpisodeEntry()
         episodeEntry[playbackProgressKey] = value
+        saveEpisodeEntry(episodeEntry)
+    }
+    
+    func loadIsRemoved() -> Bool {
+        var episodeEntry = loadEpisodeEntry()
+        if episodeEntry[isRemovedKey] == nil {
+            episodeEntry[isRemovedKey] = false
+            saveEpisodeEntry(episodeEntry)
+        }
+        
+        let isRemoved = episodeEntry[isRemovedKey] as! Bool
+        return isRemoved
+    }
+    
+    func saveIsRemoved(value: Bool) {
+        var episodeEntry = loadEpisodeEntry()
+        episodeEntry[isRemovedKey] = value
         saveEpisodeEntry(episodeEntry)
     }
     
