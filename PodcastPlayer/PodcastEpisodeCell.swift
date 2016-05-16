@@ -43,6 +43,7 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
         descriptionLabel.text = episode!.description
         dateLabel.text = episode!.date
         updateViewFromStatus()
+        updateRemovedState()
     }
     
     func updateViewFromStatus() {
@@ -67,11 +68,21 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
         }
     }
 
+    func updateRemovedState() {
+        titleLabel.textColor = episode!.isRemoved ? UIColor.darkGrayColor()
+                                                  : UIColor.blackColor()
+        descriptionLabel.textColor = titleLabel.textColor
+        dateLabel.textColor = titleLabel.textColor
+    }
     
     
 // MARK: - EpisodeDelegate
     
     func episode(episode: Episode, didChangeStatus status: DownloadStatus) {
         updateViewFromStatus()
+    }
+    
+    func episode(episode: Episode, didChangeIsRemoved isRemoved: Bool) {
+        updateRemovedState()
     }
 }

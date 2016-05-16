@@ -17,6 +17,7 @@ enum DownloadStatus {
 
 protocol EpisodeDelegate: class {
     func episode(episode: Episode, didChangeStatus status: DownloadStatus)
+    func episode(episode: Episode, didChangeIsRemoved isRemoved: Bool)
 }
 
 class Episode {
@@ -48,6 +49,9 @@ class Episode {
     var isRemoved = false {
         didSet {
             settings?.saveIsRemoved(isRemoved)
+            dispatch_async(dispatch_get_main_queue()) {
+                self.delegate?.episode(self, didChangeIsRemoved: self.isRemoved)
+            }
         }
     }
 
