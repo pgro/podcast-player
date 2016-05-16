@@ -28,7 +28,14 @@ class PodcastEpisodesViewController: UICollectionViewController {
         waitingIndicator?.startAnimating()
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             let parser = PodcastXmlParser()
-            self.episodes = parser.parseEpisodes().reverse()
+            self.episodes = parser.parseEpisodes()
+            self.episodes.sortInPlace({ (x, y) -> Bool in
+                if x.isRemoved {
+                    return false
+                }
+                
+                return x.date > y.date
+            })
             
             dispatch_async(dispatch_get_main_queue()) {
                 self.waitingIndicator?.stopAnimating()
