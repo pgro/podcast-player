@@ -92,7 +92,10 @@ class PodcastEpisodeDetailViewController: UIViewController {
         } else {
             self.player.pause()
         }
+        
+        updateRemoteControlProgress()
     }
+    
     
     @IBAction func changeVolume(sender: AnyObject) {
         player.volume = volumeSlider.value
@@ -134,6 +137,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         player.seekToTime(CMTimeMake(Int64(newPosition), 1))
         positionLabel.text = convertTimeToString(newPosition)
         isPlaybackProgressSliderTouched = false
+        updateRemoteControlProgress()
     }
     
     @IBAction func startPlaybackProgressUpdate(sender: AnyObject) {
@@ -161,6 +165,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
                 self.updatePlaybackProgress(self)
                 
                 self.waitingIndicator.stopAnimating()
+                
+                self.initRemoteControlInfo()
             }
         }
     }
@@ -201,4 +207,29 @@ class PodcastEpisodeDetailViewController: UIViewController {
             break
         }
     }
+    
+    func initRemoteControlInfo() {
+        let total = player.currentItem?.asset.duration.seconds
+        let nowPlayingInfo = [MPMediaItemPropertyArtist : "RBTV",
+                              MPMediaItemPropertyTitle : episode!.title,
+                              MPMediaItemPropertyPlaybackDuration : NSNumber(float: Float(total!))]
+        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = nowPlayingInfo
+        updateRemoteControlProgress()
+    }
+    
+    func updateRemoteControlProgress() {
+        guard var nowPlayingInfo = MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo else {
+            return
+        }
+        
+        let rate = isPlaying ? 1.0 : 0.0
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = NSNumber(double: rate)
+        
+        let total = player.currentItem?.asset.duration.seconds
+        let newPosition = Double(playbackProgressSlider.value) * total!
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(double: newPosition)
+        
+        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = nowPlayingInfo
+    }
+    
 }
