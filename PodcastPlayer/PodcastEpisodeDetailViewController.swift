@@ -210,7 +210,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     func initRemoteControlInfo() {
         let total = player.currentItem?.asset.duration.seconds
-        let nowPlayingInfo = [MPMediaItemPropertyArtist : "RBTV",
+        let nowPlayingInfo = [MPMediaItemPropertyArtist : episode!.author,
                               MPMediaItemPropertyTitle : episode!.title,
                               MPMediaItemPropertyPlaybackDuration : NSNumber(float: Float(total!))]
         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = nowPlayingInfo

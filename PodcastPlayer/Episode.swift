@@ -21,6 +21,7 @@ protocol EpisodeDelegate: class {
 }
 
 class Episode {
+    var author = ""
     var title = ""
     var description = ""
     var url = "" {
