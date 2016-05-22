@@ -72,6 +72,8 @@ class PodcastEpisodesViewController: UICollectionViewController {
                                  cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("episodeCell", forIndexPath: indexPath) as! PodcastEpisodeCell
         cell.episode = episodes[indexPath.item]
+        cell.selectionState = collectionView.allowsMultipleSelection ?
+                              PodcastEpisodeCell.SelectionState.NotSelected : .None
         return cell
     }
     

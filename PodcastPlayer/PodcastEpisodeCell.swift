@@ -15,6 +15,8 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     @IBOutlet weak var statusView: UIView!
     @IBOutlet weak var fileActionButton: UIButton!
     @IBOutlet weak var downloadingIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var selectionButton: UIButton!
+    @IBOutlet weak var selectionViewWidth: NSLayoutConstraint!
     
     var episode: Episode? {
         didSet {
@@ -73,6 +75,34 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
                                                   : UIColor.blackColor()
         descriptionLabel.textColor = titleLabel.textColor
         dateLabel.textColor = titleLabel.textColor
+    }
+    
+    
+    enum SelectionState {
+        case None
+        case NotSelected
+        case Selected
+    }
+    
+    var selectionState: SelectionState = .None {
+        didSet {
+            if selectionState == oldValue {
+                return
+            }
+            
+            let icon = selectionState == .Selected ? "" // fa-check-circle-o
+                                                   : "" // fa-circle-o
+            selectionButton.setTitle(icon, forState: .Normal)
+            
+            selectionViewWidth.constant = selectionState == .None ? 0 : 40
+            UIView.animateWithDuration(0.3) {
+                self.layoutIfNeeded()
+            }
+        }
+    }
+    
+    @IBAction func toggleSelection(sender: AnyObject) {
+        selectionState = selectionState == .Selected ? .NotSelected : .Selected
     }
     
     

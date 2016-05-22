@@ -10,6 +10,7 @@
             <string>FontAwesome</string>
             <string>FontAwesome</string>
             <string>FontAwesome</string>
+            <string>FontAwesome</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -51,14 +52,25 @@
                                     <rect key="frame" x="0.0" y="0.0" width="200" height="85"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oBV-P5-drO">
+                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="40"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="40" id="Eff-yo-yHt"/>
+                                                <constraint firstAttribute="width" id="N5R-R3-GUE"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="30"/>
+                                            <connections>
+                                                <action selector="toggleSelection:" destination="ZvQ-5B-mGd" eventType="touchUpInside" id="Xf1-3v-gzX"/>
+                                            </connections>
+                                        </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title that is very very very long" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P2I-Yv-TIB">
-                                            <rect key="frame" x="2" y="0.0" width="153" height="20.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="153" height="20.5"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hu8-wa-X0u">
-                                            <rect key="frame" x="2" y="24" width="196" height="18"/>
+                                            <rect key="frame" x="0.0" y="24" width="198" height="18"/>
                                             <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -81,6 +93,7 @@
                                             <rect key="frame" x="145" y="0.0" width="40" height="40"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="40" id="9rR-Wm-uqz"/>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="LTn-t2-rav"/>
                                                 <constraint firstAttribute="height" constant="40" id="Sql-b6-Ubf"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="21"/>
@@ -101,20 +114,24 @@
                                     <constraint firstAttribute="trailing" secondItem="yfR-Iq-j6U" secondAttribute="trailing" id="21n-jj-oKo"/>
                                     <constraint firstAttribute="trailing" secondItem="Hu8-wa-X0u" secondAttribute="trailing" id="3UY-6K-oej"/>
                                     <constraint firstItem="Hu8-wa-X0u" firstAttribute="top" secondItem="ZvQ-5B-mGd" secondAttribute="top" id="5jA-Pl-rtq"/>
+                                    <constraint firstItem="Hu8-wa-X0u" firstAttribute="leading" secondItem="P2I-Yv-TIB" secondAttribute="leading" id="5n1-74-9Vr"/>
                                     <constraint firstItem="KEC-MB-zEd" firstAttribute="top" secondItem="m9O-hM-Wy6" secondAttribute="top" id="CfW-wG-5V9"/>
                                     <constraint firstItem="Hu8-wa-X0u" firstAttribute="top" secondItem="P2I-Yv-TIB" secondAttribute="bottom" constant="4" id="DFn-o2-eg1"/>
                                     <constraint firstItem="KEC-MB-zEd" firstAttribute="centerX" secondItem="m9O-hM-Wy6" secondAttribute="centerX" id="Fli-S7-1xG"/>
                                     <constraint firstAttribute="bottom" secondItem="68C-3L-dX7" secondAttribute="bottom" id="Geq-MI-hbA"/>
                                     <constraint firstItem="68C-3L-dX7" firstAttribute="top" secondItem="P2I-Yv-TIB" secondAttribute="bottom" constant="4" id="HYp-AG-Wzb"/>
                                     <constraint firstAttribute="trailing" secondItem="P2I-Yv-TIB" secondAttribute="trailing" id="Jwx-SH-Aua"/>
+                                    <constraint firstItem="oBV-P5-drO" firstAttribute="leading" secondItem="ZvQ-5B-mGd" secondAttribute="leading" id="Phx-7m-upU"/>
                                     <constraint firstItem="P2I-Yv-TIB" firstAttribute="leading" secondItem="ZvQ-5B-mGd" secondAttribute="leading" constant="2" id="QaF-x9-KLP"/>
                                     <constraint firstItem="yfR-Iq-j6U" firstAttribute="top" secondItem="ZvQ-5B-mGd" secondAttribute="top" id="a7r-af-lCS"/>
                                     <constraint firstItem="Hu8-wa-X0u" firstAttribute="leading" secondItem="ZvQ-5B-mGd" secondAttribute="leading" constant="2" id="bBo-EP-8vN"/>
                                     <constraint firstItem="m9O-hM-Wy6" firstAttribute="top" secondItem="ZvQ-5B-mGd" secondAttribute="top" id="bEq-Ka-hgP"/>
+                                    <constraint firstItem="P2I-Yv-TIB" firstAttribute="leading" secondItem="oBV-P5-drO" secondAttribute="trailing" id="d8W-Ou-Gqh"/>
                                     <constraint firstItem="P2I-Yv-TIB" firstAttribute="top" secondItem="ZvQ-5B-mGd" secondAttribute="top" id="dHE-1k-4iH"/>
                                     <constraint firstAttribute="trailing" secondItem="68C-3L-dX7" secondAttribute="trailing" constant="2" id="fT0-8Q-xHw"/>
+                                    <constraint firstItem="oBV-P5-drO" firstAttribute="top" secondItem="ZvQ-5B-mGd" secondAttribute="top" id="iED-TR-3CD"/>
                                     <constraint firstAttribute="trailing" secondItem="Hu8-wa-X0u" secondAttribute="trailing" constant="2" id="jhJ-MH-vUH"/>
-                                    <constraint firstItem="m9O-hM-Wy6" firstAttribute="leading" secondItem="P2I-Yv-TIB" secondAttribute="trailing" constant="-10" id="lWD-SS-s8t"/>
+                                    <constraint firstItem="m9O-hM-Wy6" firstAttribute="leading" secondItem="P2I-Yv-TIB" secondAttribute="trailing" constant="-8" id="lWD-SS-s8t"/>
                                     <constraint firstItem="68C-3L-dX7" firstAttribute="leading" secondItem="ZvQ-5B-mGd" secondAttribute="leading" constant="2" id="ono-m4-6bK"/>
                                     <constraint firstItem="68C-3L-dX7" firstAttribute="top" secondItem="Hu8-wa-X0u" secondAttribute="bottom" constant="4" id="qXn-yO-fxe"/>
                                     <constraint firstItem="yfR-Iq-j6U" firstAttribute="leading" secondItem="m9O-hM-Wy6" secondAttribute="trailing" id="wZr-g2-fs1"/>
@@ -123,11 +140,13 @@
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="Jwx-SH-Aua"/>
-                                        <exclude reference="3UY-6K-oej"/>
-                                        <exclude reference="5jA-Pl-rtq"/>
+                                        <exclude reference="QaF-x9-KLP"/>
                                         <exclude reference="Geq-MI-hbA"/>
                                         <exclude reference="HYp-AG-Wzb"/>
                                         <exclude reference="xNH-nO-r42"/>
+                                        <exclude reference="3UY-6K-oej"/>
+                                        <exclude reference="5jA-Pl-rtq"/>
+                                        <exclude reference="bBo-EP-8vN"/>
                                     </mask>
                                 </variation>
                                 <connections>
@@ -135,6 +154,8 @@
                                     <outlet property="descriptionLabel" destination="68C-3L-dX7" id="etB-lI-m8G"/>
                                     <outlet property="downloadingIndicator" destination="KEC-MB-zEd" id="Lgc-fh-ymK"/>
                                     <outlet property="fileActionButton" destination="m9O-hM-Wy6" id="ffU-vM-CSx"/>
+                                    <outlet property="selectionButton" destination="oBV-P5-drO" id="kER-eg-VwQ"/>
+                                    <outlet property="selectionViewWidth" destination="N5R-R3-GUE" id="eYy-tP-dJ1"/>
                                     <outlet property="statusView" destination="yfR-Iq-j6U" id="xv6-73-4ZO"/>
                                     <outlet property="titleLabel" destination="P2I-Yv-TIB" id="U9S-fl-gGj"/>
                                     <segue destination="l7D-lh-Lkg" kind="show" identifier="showEpisodeDetailSegue" id="Wgw-SH-TcL"/>
