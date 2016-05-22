@@ -156,7 +156,7 @@ class Episode {
     /** Excludes the (downloaded) file from iCloud backup. */
     func excludeFromBackup() {
         do {
-            let fileUrl = NSURL(fileURLWithPath: self.filePath)
+            let fileUrl = NSURL(fileURLWithPath: filePath)
             try fileUrl.setResourceValue(NSNumber(bool: true), forKey: NSURLIsExcludedFromBackupKey)
         } catch {
             debugPrint(error)

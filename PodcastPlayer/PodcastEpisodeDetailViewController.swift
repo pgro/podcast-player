@@ -32,22 +32,22 @@ class PodcastEpisodeDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = episode?.title
-        self.dateLabel.text = episode?.date
-        self.descriptionLabel.text = episode?.description
+        navigationItem.title = episode?.title
+        dateLabel.text = episode?.date
+        descriptionLabel.text = episode?.description
         
         var url = NSURL(string: episode!.url)
         if episode!.fileExists() {
             url = NSURL(fileURLWithPath: episode!.filePath)
         }
         let playerItem = AVPlayerItem(URL: url!)
-        self.player.replaceCurrentItemWithPlayerItem(playerItem)
+        player.replaceCurrentItemWithPlayerItem(playerItem)
         
-        self.player.volume = volumeSlider.value
+        player.volume = volumeSlider.value
         updatePlaybackProgressAndDuration()
         restoreVolume()
         
-        playerObserver = self.player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
+        playerObserver = player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
                                                                         queue: dispatch_get_main_queue())
         { [weak self] (time) in
             self?.playbackProgressDidChange(time)
@@ -81,16 +81,16 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     
     @IBAction func togglePlayback(sender: AnyObject) {
-        self.isPlaying = !self.isPlaying
+        isPlaying = !isPlaying
         
         // set pause/play icon via Font Awesome
-        let title = self.isPlaying ? "" : ""
-        self.playButton.setTitle(title, forState: UIControlState.Normal)
+        let title = isPlaying ? "" : ""
+        playButton.setTitle(title, forState: UIControlState.Normal)
         
-        if self.isPlaying {
-            self.player.play()
+        if isPlaying {
+            player.play()
         } else {
-            self.player.pause()
+            player.pause()
         }
         
         updateRemoteControlProgress()
