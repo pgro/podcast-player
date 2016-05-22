@@ -12,6 +12,8 @@ class PodcastEpisodesViewController: UICollectionViewController {
     var episodes = Array<Episode>()
     let cellMargin = CGFloat(10)
     weak var waitingIndicator: UIActivityIndicatorView?
+    var multiSelectButton: UIBarButtonItem?
+    var deleteButton: UIBarButtonItem?
 
     
     override func viewDidLoad() {
@@ -19,8 +21,38 @@ class PodcastEpisodesViewController: UICollectionViewController {
         
         let layout = collectionViewLayout as! UICollectionViewFlowLayout
         layout.sectionInset = UIEdgeInsetsMake(cellMargin, cellMargin, cellMargin, cellMargin)
-        
+        createBarButtons()
         loadEpisodes()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        showBarButtons()
+    }
+    
+    
+    func createBarButtons() {
+        multiSelectButton = UIBarButtonItem(title: "",
+                                            style: UIBarButtonItemStyle.Plain,
+                                            target: self,
+                                            action: #selector(toggleMultiSelection))
+        let font = UIFont(name: "FontAwesome", size: 20)
+        multiSelectButton!.setTitleTextAttributes([NSFontAttributeName:font!],
+                                                 forState: UIControlState.Normal)
+        deleteButton = UIBarButtonItem(title: "",
+                                       style: UIBarButtonItemStyle.Plain,
+                                       target: self,
+                                       action: #selector(deleteSelectedEpisodes))
+        deleteButton!.setTitleTextAttributes([NSFontAttributeName:font!],
+                                             forState: UIControlState.Normal)
+    }
+    
+    func showBarButtons() {
+        if collectionView!.allowsMultipleSelection {
+            parentViewController?.navigationItem.rightBarButtonItems = [multiSelectButton!, deleteButton!]
+        } else {
+            parentViewController?.navigationItem.rightBarButtonItems = [multiSelectButton!]
+        }
     }
     
     
@@ -58,6 +90,17 @@ class PodcastEpisodesViewController: UICollectionViewController {
             controller?.episode = episodeCell?.episode
             return
         }
+    }
+    
+    
+    func toggleMultiSelection(sender: AnyObject) {
+        collectionView?.allowsMultipleSelection = !collectionView!.allowsMultipleSelection
+        showBarButtons()
+        collectionView?.reloadData()
+    }
+    
+    func deleteSelectedEpisodes(sender: AnyObject) {
+        debugPrint("remove em")
     }
     
     
