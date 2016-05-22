@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import MediaPlayer
 
 class PodcastEpisodeDetailViewController: UIViewController {
     var episode: Episode?
@@ -59,6 +60,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
                                                          selector: #selector(appDidEnterBackground),
                                                          name: UIApplicationDidEnterBackgroundNotification,
                                                          object: nil)
+        UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -66,6 +68,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         
         player.removeTimeObserver(playerObserver!)
         NSNotificationCenter.defaultCenter().removeObserver(self)
+        UIApplication.sharedApplication().endReceivingRemoteControlEvents()
         
         savePlaybackProgress()
         saveVolume()
@@ -180,6 +183,22 @@ class PodcastEpisodeDetailViewController: UIViewController {
         if defaults.valueForKey(volumeKey) != nil {
             volumeSlider.value = defaults.valueForKey(volumeKey) as! Float
             changeVolume(self)
+        }
+    }
+
+
+// MARK: - iOS system player/playback info
+
+    override func remoteControlReceivedWithEvent(event: UIEvent?) {
+        switch event!.subtype {
+        case .RemoteControlPlay:
+            togglePlayback(self)
+            break
+        case .RemoteControlPause:
+            togglePlayback(self)
+            break
+        default:
+            break
         }
     }
 }
