@@ -61,19 +61,25 @@ class PodcastEpisodesViewController: UICollectionViewController {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             let parser = PodcastXmlParser()
             self.episodes = parser.parseEpisodes()
-            self.episodes.sortInPlace({ (x, y) -> Bool in
-                if x.isRemoved {
-                    return false
-                }
-                
-                return x.date > y.date
-            })
-            
+            self.sortEpisodes()
             dispatch_async(dispatch_get_main_queue()) {
                 self.waitingIndicator?.stopAnimating()
                 self.collectionView?.reloadData()
             }
         }
+    }
+    
+    func sortEpisodes() {
+        episodes.sortInPlace({ (x, y) -> Bool in
+            if x.isRemoved && !y.isRemoved {
+                return false
+            }
+            if y.isRemoved && !x.isRemoved {
+                return true
+            }
+            
+            return x.date > y.date
+        })
     }
     
     
@@ -106,6 +112,7 @@ class PodcastEpisodesViewController: UICollectionViewController {
         for indexPath in selectedIndexPaths {
             episodes[indexPath.item].delete()
         }
+        sortEpisodes()
         
         toggleMultiSelection(self)
     }
