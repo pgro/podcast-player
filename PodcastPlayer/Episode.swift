@@ -90,7 +90,7 @@ class Episode {
     
     func delete() {
         if status != .Finished {
-            // file not available -> nothing to do
+            isRemoved = true
             return
         }
         
