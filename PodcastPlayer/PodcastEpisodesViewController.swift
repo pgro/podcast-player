@@ -100,7 +100,14 @@ class PodcastEpisodesViewController: UICollectionViewController {
     }
     
     func deleteSelectedEpisodes(sender: AnyObject) {
-        debugPrint("remove em")
+        guard let selectedIndexPaths = collectionView?.indexPathsForSelectedItems() else {
+            return
+        }
+        for indexPath in selectedIndexPaths {
+            episodes[indexPath.item].delete()
+        }
+        
+        toggleMultiSelection(self)
     }
     
     
