@@ -78,31 +78,30 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     }
     
     
-    enum SelectionState {
-        case None
-        case NotSelected
-        case Selected
-    }
-    
-    var selectionState: SelectionState = .None {
+    var showSelectionIndicator = false {
         didSet {
-            if selectionState == oldValue {
+            if showSelectionIndicator == oldValue {
                 return
             }
-            
-            let icon = selectionState == .Selected ? "" // fa-check-circle-o
-                                                   : "" // fa-circle-o
-            selectionButton.setTitle(icon, forState: .Normal)
-            
-            selectionViewWidth.constant = selectionState == .None ? 0 : 40
-            UIView.animateWithDuration(0.3) {
-                self.layoutIfNeeded()
-            }
+
+            selectionButton.hidden = true
+            selectionViewWidth.constant = showSelectionIndicator ? 40 : 0
+            UIView.animateWithDuration(0.3,
+                                       animations: {
+                                           self.layoutIfNeeded()
+                                       },
+                                       completion: { _ in
+                                           self.selectionButton.hidden = false
+                                       })
         }
     }
     
-    @IBAction func toggleSelection(sender: AnyObject) {
-        selectionState = selectionState == .Selected ? .NotSelected : .Selected
+    override var selected: Bool {
+        didSet {
+            let icon = selected ? "" // fa-check-circle-o
+                                : "" // fa-circle-o
+            selectionButton.setTitle(icon, forState: .Normal)
+        }
     }
     
     

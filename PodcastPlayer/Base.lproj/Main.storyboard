@@ -52,16 +52,13 @@
                                     <rect key="frame" x="0.0" y="0.0" width="200" height="85"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oBV-P5-drO">
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oBV-P5-drO">
                                             <rect key="frame" x="0.0" y="0.0" width="0.0" height="40"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="40" id="Eff-yo-yHt"/>
                                                 <constraint firstAttribute="width" id="N5R-R3-GUE"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" name="FontAwesome" family="FontAwesome" pointSize="30"/>
-                                            <connections>
-                                                <action selector="toggleSelection:" destination="ZvQ-5B-mGd" eventType="touchUpInside" id="Xf1-3v-gzX"/>
-                                            </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title that is very very very long" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P2I-Yv-TIB">
                                             <rect key="frame" x="0.0" y="0.0" width="153" height="20.5"/>
@@ -141,12 +138,12 @@
                                     <mask key="constraints">
                                         <exclude reference="Jwx-SH-Aua"/>
                                         <exclude reference="QaF-x9-KLP"/>
-                                        <exclude reference="Geq-MI-hbA"/>
-                                        <exclude reference="HYp-AG-Wzb"/>
-                                        <exclude reference="xNH-nO-r42"/>
                                         <exclude reference="3UY-6K-oej"/>
                                         <exclude reference="5jA-Pl-rtq"/>
                                         <exclude reference="bBo-EP-8vN"/>
+                                        <exclude reference="Geq-MI-hbA"/>
+                                        <exclude reference="HYp-AG-Wzb"/>
+                                        <exclude reference="xNH-nO-r42"/>
                                     </mask>
                                 </variation>
                                 <connections>
