@@ -158,7 +158,6 @@
                                     <outlet property="selectionViewWidth" destination="N5R-R3-GUE" id="eYy-tP-dJ1"/>
                                     <outlet property="statusView" destination="yfR-Iq-j6U" id="xv6-73-4ZO"/>
                                     <outlet property="titleLabel" destination="P2I-Yv-TIB" id="U9S-fl-gGj"/>
-                                    <segue destination="l7D-lh-Lkg" kind="show" identifier="showEpisodeDetailSegue" id="Wgw-SH-TcL"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -167,6 +166,9 @@
                             <outlet property="delegate" destination="zuA-YM-oZH" id="soW-oV-PVN"/>
                         </connections>
                     </collectionView>
+                    <connections>
+                        <segue destination="l7D-lh-Lkg" kind="show" identifier="showEpisodeDetailSegue" id="xyb-mK-aJP"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Odd-hK-kdw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

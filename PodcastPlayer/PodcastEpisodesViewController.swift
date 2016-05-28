@@ -134,4 +134,12 @@ class PodcastEpisodesViewController: UICollectionViewController {
         let size = CGSizeMake(cellWidth, CGFloat(85))
         return size
     }
+    
+    override func collectionView(collectionView: UICollectionView,
+                                 didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if !collectionView.allowsMultipleSelection {
+            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PodcastEpisodeCell
+            performSegueWithIdentifier("showEpisodeDetailSegue", sender: cell)
+        }
+    }
 }
