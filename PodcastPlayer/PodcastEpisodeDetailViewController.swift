@@ -25,7 +25,6 @@ class PodcastEpisodeDetailViewController: UIViewController {
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
-    @IBOutlet weak var speakerIconView: UILabel!
     @IBOutlet weak var waitingIndicator: UIActivityIndicatorView!
     
     
@@ -99,8 +98,6 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     @IBAction func changeVolume(sender: AnyObject) {
         player.volume = volumeSlider.value
-        // set respective speaker icon via Font Awesome
-        speakerIconView.text = volumeSlider.value == 0 ? "" : ""
     }
     
     func convertTimeToString(totalSeconds: Double) -> String {
