@@ -12,6 +12,7 @@ import MediaPlayer
 
 class PodcastEpisodeDetailViewController: UIViewController {
     var episode: Episode?
+    var imageUrl: String?
     var isPlaying = false
     var player = AVPlayer()
     var playerObserver: AnyObject?
@@ -26,6 +27,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var volumeSlider: UISlider!
     @IBOutlet weak var waitingIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var coverImageView: UIImageView!
     
     
     override func viewDidLoad() {
@@ -34,6 +36,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         navigationItem.title = episode?.title
         dateLabel.text = episode?.date
         descriptionLabel.text = episode?.description
+        loadImage()
         
         var url = NSURL(string: episode!.url)
         if episode!.fileExists() {
@@ -76,6 +79,22 @@ class PodcastEpisodeDetailViewController: UIViewController {
     func appDidEnterBackground() {
         savePlaybackProgress()
         saveVolume()
+    }
+    
+    
+    func loadImage() {
+        if (imageUrl == nil) {
+            return
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            // TODO: improve image loading/cache it
+            let imageData = NSData(contentsOfURL: NSURL(string: self.imageUrl!)!)
+            let image = UIImage(data: imageData!)
+            dispatch_async(dispatch_get_main_queue()) {
+                self.coverImageView.image = image
+            }
+        }
     }
     
     

@@ -53,6 +53,16 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
         currentEpisode?.url = xmlCandidateUrl!
     }
     
+    func tryToParsePodcastImageUrl(xmlCandidateUrl: String?) {
+        if currentElementName != "itunes:image" ||
+            currentEpisode != nil ||
+            xmlCandidateUrl == nil {
+            return
+        }
+        
+        podcast?.imageUrl = xmlCandidateUrl!
+    }
+    
     func parser(parser: NSXMLParser,
                 foundCharacters string: String) {
         if currentElementName == nil {

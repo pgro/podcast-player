@@ -286,6 +286,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="coverImageView" destination="s5P-TY-0zo" id="rAU-ey-8DB"/>
                         <outlet property="dateLabel" destination="lQv-9h-47i" id="wPA-Bb-4KZ"/>
                         <outlet property="descriptionLabel" destination="TE1-Ya-Yxl" id="dRT-y4-Lz3"/>
                         <outlet property="durationLabel" destination="Ffr-PA-huu" id="crw-3r-IvC"/>

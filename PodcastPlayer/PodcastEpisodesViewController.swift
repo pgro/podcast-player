@@ -9,6 +9,7 @@
 import UIKit
 
 class PodcastEpisodesViewController: UICollectionViewController {
+    let podcast = Podcast(feedUrl: "http://www.rocketbeans.tv/plauschangriff.xml")
     var episodes = Array<Episode>()
     let cellMargin = CGFloat(10)
     weak var waitingIndicator: UIActivityIndicatorView?
@@ -59,9 +60,8 @@ class PodcastEpisodesViewController: UICollectionViewController {
     func loadEpisodes() {
         waitingIndicator?.startAnimating()
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            let podcast = Podcast(feedUrl: "http://www.rocketbeans.tv/plauschangriff.xml")
-            podcast.retrieveEpisodes()
-            self.episodes = podcast.episodes
+            self.podcast.retrieveEpisodes()
+            self.episodes = self.podcast.episodes
             self.sortEpisodes()
             dispatch_async(dispatch_get_main_queue()) {
                 self.waitingIndicator?.stopAnimating()
@@ -95,6 +95,7 @@ class PodcastEpisodesViewController: UICollectionViewController {
             let controller = segue.destinationViewController as? PodcastEpisodeDetailViewController
             let episodeCell = sender as? PodcastEpisodeCell
             controller?.episode = episodeCell?.episode
+            controller?.imageUrl = podcast.imageUrl
             return
         }
     }
