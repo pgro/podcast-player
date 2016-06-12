@@ -12,7 +12,7 @@ import MediaPlayer
 
 class PodcastEpisodeDetailViewController: UIViewController {
     var episode: Episode?
-    var imageUrl: String?
+    var podcast: Podcast?
     var isPlaying = false
     var player = AVPlayer()
     var playerObserver: AnyObject?
@@ -83,17 +83,9 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     
     func loadImage() {
-        if (imageUrl == nil) {
-            return
-        }
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            // TODO: improve image loading/cache it
-            let imageData = NSData(contentsOfURL: NSURL(string: self.imageUrl!)!)
-            let image = UIImage(data: imageData!)
-            dispatch_async(dispatch_get_main_queue()) {
-                self.coverImageView.image = image
-            }
+        podcast?.loadImage() { filePath in
+            let image = UIImage(contentsOfFile: filePath)
+            self.coverImageView.image = image
         }
     }
     

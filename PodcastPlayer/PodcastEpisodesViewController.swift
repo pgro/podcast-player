@@ -95,7 +95,7 @@ class PodcastEpisodesViewController: UICollectionViewController {
             let controller = segue.destinationViewController as? PodcastEpisodeDetailViewController
             let episodeCell = sender as? PodcastEpisodeCell
             controller?.episode = episodeCell?.episode
-            controller?.imageUrl = podcast.imageUrl
+            controller?.podcast = podcast
             return
         }
     }

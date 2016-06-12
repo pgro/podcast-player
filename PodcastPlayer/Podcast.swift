@@ -6,7 +6,7 @@
 //  Copyright © 2016 Peter Großmann. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 
 class Podcast {
@@ -22,5 +22,17 @@ class Podcast {
     func retrieveEpisodes() {
         let parser = PodcastXmlParser(podcast: self)
         episodes = parser.parseEpisodes()
+    }
+    
+    
+    func loadImage(completion: (filePath: String) -> Void) {
+        if (imageUrl.isEmpty) {
+            return
+        }
+        
+        let cache = FileCache()
+        cache.filePath(imageUrl) { filePath in
+            completion(filePath: filePath)
+        }
     }
 }
