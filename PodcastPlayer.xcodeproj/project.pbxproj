@@ -20,6 +20,7 @@
 		2673C01A1CD3E4FB009CC7FB /* PodcastXmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2673C0191CD3E4FB009CC7FB /* PodcastXmlParser.swift */; };
 		2686C48E1CE74D9A00336D0B /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2686C48D1CE74D9A00336D0B /* SettingsManager.swift */; };
 		269386E81CE8783400EFC3E2 /* PodcastPlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 269386E71CE8783400EFC3E2 /* PodcastPlayerTests.swift */; };
+		26A4974A1CFB151E0085DDF5 /* Podcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A497491CFB151E0085DDF5 /* Podcast.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		269386E51CE8783400EFC3E2 /* PodcastPlayerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PodcastPlayerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		269386E71CE8783400EFC3E2 /* PodcastPlayerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastPlayerTests.swift; sourceTree = "<group>"; };
 		269386E91CE8783400EFC3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		26A497491CFB151E0085DDF5 /* Podcast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Podcast.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,8 +88,9 @@
 			isa = PBXGroup;
 			children = (
 				2673C0171CD3CE1B009CC7FB /* Episode.swift */,
-				2686C48D1CE74D9A00336D0B /* SettingsManager.swift */,
+				26A497491CFB151E0085DDF5 /* Podcast.swift */,
 				2673C0191CD3E4FB009CC7FB /* PodcastXmlParser.swift */,
+				2686C48D1CE74D9A00336D0B /* SettingsManager.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				264162DA1CDBB6F100B41E7B /* PodcastEpisodeDetailViewController.swift in Sources */,
 				2673C01A1CD3E4FB009CC7FB /* PodcastXmlParser.swift in Sources */,
 				2686C48E1CE74D9A00336D0B /* SettingsManager.swift in Sources */,
+				26A4974A1CFB151E0085DDF5 /* Podcast.swift in Sources */,
 				26082C3F1CD6084F00583FF1 /* MainViewController.swift in Sources */,
 				2673C0181CD3CE1B009CC7FB /* Episode.swift in Sources */,
 				2673C0061CD3C0A8009CC7FB /* AppDelegate.swift in Sources */,
@@ -443,6 +447,7 @@
 				269386ED1CE8783400EFC3E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

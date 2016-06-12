@@ -53,4 +53,11 @@ class PodcastPlayerTests: XCTestCase {
                        settings.loadPlaybackProgress())
     }
     
+    
+    func testPodcastParsing() {
+        let url = "http://www.rocketbeans.tv/plauschangriff.xml"
+        let podcast = Podcast(feedUrl: url)
+        podcast.retrieveEpisodes()
+        XCTAssertNotEqual(0, podcast.episodes.count)
+    }
 }

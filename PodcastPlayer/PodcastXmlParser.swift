@@ -9,13 +9,17 @@
 import Foundation
 
 class PodcastXmlParser: NSObject, NSXMLParserDelegate {
+    weak var podcast: Podcast?
     var episodes = Array<Episode>()
     var currentEpisode: Episode?
     var currentElementName: String?
     
+    init(podcast: Podcast) {
+        self.podcast = podcast
+    }
+    
     func parseEpisodes() -> Array<Episode> {
-        let podcastUrl = "http://www.rocketbeans.tv/plauschangriff.xml"
-        let parser = NSXMLParser(contentsOfURL: NSURL(string: podcastUrl)!)
+        let parser = NSXMLParser(contentsOfURL: NSURL(string: podcast!.feedUrl)!)
         parser?.delegate = self
         parser?.parse()
         return episodes
@@ -36,14 +40,13 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
             return
         }
         
-        tryToParseUrl(attributeDict["url"])
+        tryToParsePodcastImageUrl(attributeDict["href"])
+        tryToParseStreamUrl(attributeDict["url"])
     }
     
-    func tryToParseUrl(xmlCandidateUrl: String?) {
-        if currentElementName != "enclosure" {
-            return
-        }
-        if xmlCandidateUrl == nil {
+    func tryToParseStreamUrl(xmlCandidateUrl: String?) {
+        if currentElementName != "enclosure" ||
+            xmlCandidateUrl == nil {
             return
         }
         

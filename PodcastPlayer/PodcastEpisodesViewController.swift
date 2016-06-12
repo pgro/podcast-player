@@ -59,8 +59,9 @@ class PodcastEpisodesViewController: UICollectionViewController {
     func loadEpisodes() {
         waitingIndicator?.startAnimating()
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            let parser = PodcastXmlParser()
-            self.episodes = parser.parseEpisodes()
+            let podcast = Podcast(feedUrl: "http://www.rocketbeans.tv/plauschangriff.xml")
+            podcast.retrieveEpisodes()
+            self.episodes = podcast.episodes
             self.sortEpisodes()
             dispatch_async(dispatch_get_main_queue()) {
                 self.waitingIndicator?.stopAnimating()
