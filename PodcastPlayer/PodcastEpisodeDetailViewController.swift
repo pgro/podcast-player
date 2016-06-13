@@ -152,14 +152,16 @@ class PodcastEpisodeDetailViewController: UIViewController {
         let newPosition = Double(playbackProgressSlider.value) * total!
         player.seekToTime(CMTimeMake(Int64(newPosition), 1))
         positionLabel.text = convertTimeToString(newPosition)
-        isPlaybackProgressSliderTouched = false
         updateRemoteControlProgress()
     }
     
     @IBAction func startPlaybackProgressUpdate(sender: AnyObject) {
         isPlaybackProgressSliderTouched = true
     }
-    
+    @IBAction func endPlaybackProgressUpdate(sender: AnyObject) {
+        isPlaybackProgressSliderTouched = false
+    }
+ 
 
 // MARK: load from/save to user defaults
     

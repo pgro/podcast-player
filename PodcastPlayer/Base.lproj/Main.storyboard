@@ -186,8 +186,10 @@
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="QlF-AV-ASa">
                                         <rect key="frame" x="56" y="25" width="468" height="31"/>
                                         <connections>
+                                            <action selector="endPlaybackProgressUpdate:" destination="l7D-lh-Lkg" eventType="touchUpInside" id="JPQ-Rz-wOC"/>
+                                            <action selector="endPlaybackProgressUpdate:" destination="l7D-lh-Lkg" eventType="touchUpOutside" id="ceJ-UH-hL0"/>
                                             <action selector="startPlaybackProgressUpdate:" destination="l7D-lh-Lkg" eventType="touchDown" id="xj3-HO-PDU"/>
-                                            <action selector="updatePlaybackProgress:" destination="l7D-lh-Lkg" eventType="touchUpInside" id="g8A-wt-KWR"/>
+                                            <action selector="updatePlaybackProgress:" destination="l7D-lh-Lkg" eventType="valueChanged" id="gmp-ve-6Dg"/>
                                         </connections>
                                     </slider>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k8Q-Wd-kAU">
