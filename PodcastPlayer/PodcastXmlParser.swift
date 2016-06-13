@@ -124,8 +124,11 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
         dateString = dateString.substringToIndex(yearEndIndex)
         
         let formatter = NSDateFormatter()
+        formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
+        formatter.timeZone = NSTimeZone(name: "UTC")
         formatter.dateFormat = "dd LLL yyyy"
-        let date = formatter.dateFromString(dateString)!
+        let t = formatter.dateFromString(dateString)
+        let date = t!
         
         formatter.dateFormat = "yyyy-MM-dd"
         currentEpisode?.date = formatter.stringFromDate(date)
