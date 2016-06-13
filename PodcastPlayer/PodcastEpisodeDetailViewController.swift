@@ -89,8 +89,11 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     func loadImage() {
         podcast?.loadImage() { filePath in
-            let image = UIImage(contentsOfFile: filePath)
+            guard let image = UIImage(contentsOfFile: filePath) else {
+                return
+            }
             self.coverImageView.image = image
+            self.updateRemoteControlArtwork(image)
         }
     }
     
@@ -228,6 +231,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
                               MPMediaItemPropertyPlaybackDuration : NSNumber(float: Float(total!))]
         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = nowPlayingInfo
         updateRemoteControlProgress()
+        updateRemoteControlArtwork(coverImageView.image)
     }
     
     func updateRemoteControlProgress() {
@@ -245,4 +249,15 @@ class PodcastEpisodeDetailViewController: UIViewController {
         MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = nowPlayingInfo
     }
     
+    func updateRemoteControlArtwork(image: UIImage?) {
+        if image == nil {
+            return
+        }
+        guard var nowPlayingInfo = MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo else {
+            return
+        }
+        let artwork = MPMediaItemArtwork(image: image!)
+        nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+        MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = nowPlayingInfo
+    }
 }
