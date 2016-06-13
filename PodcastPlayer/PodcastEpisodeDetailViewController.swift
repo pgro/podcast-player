@@ -46,8 +46,10 @@ class PodcastEpisodeDetailViewController: UIViewController {
         player.replaceCurrentItemWithPlayerItem(playerItem)
         
         player.volume = volumeSlider.value
-        updatePlaybackProgressAndDuration()
         restoreVolume()
+        playbackProgressSlider.enabled = false
+        playButton.enabled = false
+        updatePlaybackProgressAndDuration()
         
         playerObserver = player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
                                                                         queue: dispatch_get_main_queue())
@@ -183,6 +185,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
                 self.updatePlaybackProgress(self)
                 
                 self.waitingIndicator.stopAnimating()
+                self.playbackProgressSlider.enabled = true
+                self.playButton.enabled = true
                 
                 self.initRemoteControlInfo()
             }
