@@ -63,6 +63,11 @@ class PodcastEpisodeDetailViewController: UIViewController {
                                                          name: UIApplicationDidEnterBackgroundNotification,
                                                          object: nil)
         UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        } catch {
+            debugPrint(error)
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
