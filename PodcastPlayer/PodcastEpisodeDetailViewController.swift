@@ -111,6 +111,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
             player.play()
         } else {
             player.pause()
+            savePlaybackProgress()
         }
         
         updateRemoteControlProgress()
