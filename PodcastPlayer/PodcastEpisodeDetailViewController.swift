@@ -17,6 +17,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
     var player = AVPlayer()
     var playerObserver: AnyObject?
     let volumeKey = "volume"
+    let keepUpKey = "playbackLikelyToKeepUp"
+    private var kvoContext = 0
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
@@ -64,6 +66,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
                                                          selector: #selector(appDidEnterBackground),
                                                          name: UIApplicationDidEnterBackgroundNotification,
                                                          object: nil)
+        player.currentItem?.addObserver(self, forKeyPath: keepUpKey, options: .New, context: &kvoContext)
         UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
@@ -72,10 +75,31 @@ class PodcastEpisodeDetailViewController: UIViewController {
         }
     }
     
+    
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if context == &kvoContext && keyPath == keepUpKey {
+            guard let keepUp = player.currentItem?.playbackLikelyToKeepUp else {
+                return
+            }
+            if keepUp {
+                waitingIndicator.stopAnimating()
+                togglePlayback(self)
+            } else {
+                waitingIndicator.startAnimating()
+                isPlaying = false
+            }
+            return
+        }
+        
+        super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+    }
+    
+    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
         player.removeTimeObserver(playerObserver!)
+        player.currentItem?.removeObserver(self, forKeyPath: keepUpKey, context: &kvoContext)
         NSNotificationCenter.defaultCenter().removeObserver(self)
         UIApplication.sharedApplication().endReceivingRemoteControlEvents()
         
