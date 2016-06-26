@@ -14,7 +14,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     var episode: Episode?
     var podcast: Podcast?
     var isPlaying = false
-    var player = AVPlayer()
+    var player: AVPlayer?
     var playerObserver: AnyObject?
     let volumeKey = "volume"
     let keepUpKey = "playbackLikelyToKeepUp"
@@ -47,13 +47,13 @@ class PodcastEpisodeDetailViewController: UIViewController {
         let playerItem = AVPlayerItem(URL: url!)
         player.replaceCurrentItemWithPlayerItem(playerItem)
         
-        player.volume = volumeSlider.value
+        player?.volume = volumeSlider.value
         restoreVolume()
         playbackProgressSlider.enabled = false
         playButton.enabled = false
         updatePlaybackProgressAndDuration()
         
-        playerObserver = player.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
+        playerObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
                                                                         queue: dispatch_get_main_queue())
         { [weak self] (time) in
             self?.playbackProgressDidChange(time)
@@ -61,12 +61,12 @@ class PodcastEpisodeDetailViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(playbackDidEnd),
                                                          name: AVPlayerItemDidPlayToEndTimeNotification,
-                                                         object: playerItem)
+                                                         object: player?.currentItem)
         NSNotificationCenter.defaultCenter().addObserver(self,
                                                          selector: #selector(appDidEnterBackground),
                                                          name: UIApplicationDidEnterBackgroundNotification,
                                                          object: nil)
-        player.currentItem?.addObserver(self, forKeyPath: keepUpKey, options: .New, context: &kvoContext)
+        player?.currentItem?.addObserver(self, forKeyPath: keepUpKey, options: .New, context: &kvoContext)
         UIApplication.sharedApplication().beginReceivingRemoteControlEvents()
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
@@ -78,7 +78,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if context == &kvoContext && keyPath == keepUpKey {
-            guard let keepUp = player.currentItem?.playbackLikelyToKeepUp else {
+            guard let keepUp = player?.currentItem?.playbackLikelyToKeepUp else {
                 return
             }
             if keepUp {
@@ -100,8 +100,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        player.removeTimeObserver(playerObserver!)
-        player.currentItem?.removeObserver(self, forKeyPath: keepUpKey, context: &kvoContext)
+        player?.removeTimeObserver(playerObserver!)
+        player?.currentItem?.removeObserver(self, forKeyPath: keepUpKey, context: &kvoContext)
         NSNotificationCenter.defaultCenter().removeObserver(self)
         UIApplication.sharedApplication().endReceivingRemoteControlEvents()
         
@@ -134,9 +134,9 @@ class PodcastEpisodeDetailViewController: UIViewController {
         playButton.setTitle(title, forState: UIControlState.Normal)
         
         if isPlaying {
-            player.play()
+            player?.play()
         } else {
-            player.pause()
+            player?.pause()
             savePlaybackProgress()
         }
         
@@ -145,7 +145,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     
     @IBAction func changeVolume(sender: AnyObject) {
-        player.volume = volumeSlider.value
+        player?.volume = volumeSlider.value
     }
     
     func convertTimeToString(totalSeconds: Double) -> String {
@@ -164,7 +164,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
             return
         }
         
-        let total = player.currentItem?.asset.duration.seconds
+        let total = player?.currentItem?.asset.duration.seconds
         let new = time.seconds
         playbackProgressSlider.value = Float(new / total!)
         positionLabel.text = convertTimeToString(new)
@@ -177,9 +177,9 @@ class PodcastEpisodeDetailViewController: UIViewController {
     }
     
     @IBAction func updatePlaybackProgress(sender: AnyObject) {
-        let total = player.currentItem?.asset.duration.seconds
+        let total = player?.currentItem?.asset.duration.seconds
         let newPosition = Double(playbackProgressSlider.value) * total!
-        player.seekToTime(CMTimeMake(Int64(newPosition), 1))
+        player?.seekToTime(CMTimeMake(Int64(newPosition), 1))
         positionLabel.text = convertTimeToString(newPosition)
         updateRemoteControlProgress()
     }
@@ -203,7 +203,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             /* retrieve duration asynchronous so the GUI is not blocked
              * when the asset needs to be retrieved from a remote URL */
-            let total = self.player.currentItem?.asset.duration.seconds
+            let total = self.player?.currentItem?.asset.duration.seconds
             
             dispatch_async(dispatch_get_main_queue()) {
                 self.durationLabel.text = self.convertTimeToString(total!)
@@ -258,7 +258,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     }
     
     func initRemoteControlInfo() {
-        let total = player.currentItem?.asset.duration.seconds
+        let total = player?.currentItem?.asset.duration.seconds
         let nowPlayingInfo = [MPMediaItemPropertyArtist : episode!.author,
                               MPMediaItemPropertyTitle : episode!.title,
                               MPMediaItemPropertyPlaybackDuration : NSNumber(float: Float(total!))]
@@ -275,7 +275,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
         let rate = isPlaying ? 1.0 : 0.0
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = NSNumber(double: rate)
         
-        let total = player.currentItem?.asset.duration.seconds
+        let total = player?.currentItem?.asset.duration.seconds
         let newPosition = Double(playbackProgressSlider.value) * total!
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(double: newPosition)
         

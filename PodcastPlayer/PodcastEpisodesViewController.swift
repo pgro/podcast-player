@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class PodcastEpisodesViewController: UICollectionViewController {
     let podcast = Podcast(feedUrl: "http://www.rocketbeans.tv/plauschangriff.xml")
@@ -15,6 +16,7 @@ class PodcastEpisodesViewController: UICollectionViewController {
     weak var waitingIndicator: UIActivityIndicatorView?
     var multiSelectButton: UIBarButtonItem?
     var deleteButton: UIBarButtonItem?
+    let player = AVPlayer()
 
     
     override func viewDidLoad() {
@@ -96,6 +98,7 @@ class PodcastEpisodesViewController: UICollectionViewController {
             let episodeCell = sender as? PodcastEpisodeCell
             controller?.episode = episodeCell?.episode
             controller?.podcast = podcast
+            controller?.player = player
             return
         }
     }
