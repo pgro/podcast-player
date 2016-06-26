@@ -83,10 +83,12 @@ class PodcastEpisodeDetailViewController: UIViewController {
             }
             if keepUp {
                 waitingIndicator.stopAnimating()
-                togglePlayback(self)
+                if isPlaying {
+                    isPlaying = false
+                    togglePlayback(self)
+                }
             } else {
                 waitingIndicator.startAnimating()
-                isPlaying = false
             }
             return
         }
