@@ -40,18 +40,9 @@ class PodcastEpisodeDetailViewController: UIViewController {
         descriptionLabel.text = episode?.description
         loadImage()
         
-        var url = NSURL(string: episode!.url)
-        if episode!.fileExists() {
-            url = NSURL(fileURLWithPath: episode!.filePath)
-        }
-        let playerItem = AVPlayerItem(URL: url!)
-        player.replaceCurrentItemWithPlayerItem(playerItem)
-        
         player?.volume = volumeSlider.value
         restoreVolume()
-        playbackProgressSlider.enabled = false
-        playButton.enabled = false
-        updatePlaybackProgressAndDuration()
+        initAssetAndProgress()
         
         playerObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1),
                                                                         queue: dispatch_get_main_queue())
@@ -114,6 +105,24 @@ class PodcastEpisodeDetailViewController: UIViewController {
         saveVolume()
     }
     
+    
+    func initAssetAndProgress() {
+        var url = NSURL(string: episode!.url)
+        if episode!.fileExists() {
+            url = NSURL(fileURLWithPath: episode!.filePath)
+        }
+        
+        let asset = player?.currentItem?.asset as? AVURLAsset
+        if asset == nil || asset!.URL.absoluteString != url?.absoluteString {
+            player?.pause()
+            let playerItem = AVPlayerItem(URL: url!)
+            player?.replaceCurrentItemWithPlayerItem(playerItem)
+            
+            playbackProgressSlider.enabled = false
+            playButton.enabled = false
+        }
+        updatePlaybackProgressAndDuration()
+    }
     
     func loadImage() {
         podcast?.loadImage() { filePath in
