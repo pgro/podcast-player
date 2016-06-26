@@ -193,6 +193,15 @@ class PodcastEpisodeDetailViewController: UIViewController {
         updateRemoteControlProgress()
     }
     
+    func updatePlaybackProgressInGui() {
+        let total = player?.currentItem?.asset.duration.seconds
+        let current = self.player?.currentItem?.currentTime().seconds
+        self.playbackProgressSlider.value = Float(current! / total!)
+        let newPosition = Double(playbackProgressSlider.value) * total!
+        positionLabel.text = convertTimeToString(newPosition)
+        updateRemoteControlProgress()
+    }
+    
     @IBAction func startPlaybackProgressUpdate(sender: AnyObject) {
         isPlaybackProgressSliderTouched = true
     }
@@ -217,8 +226,13 @@ class PodcastEpisodeDetailViewController: UIViewController {
             dispatch_async(dispatch_get_main_queue()) {
                 self.durationLabel.text = self.convertTimeToString(total!)
                 
-                self.playbackProgressSlider.value = self.retrievePlaybackProgress()
-                self.updatePlaybackProgress(self)
+                if self.player?.rate == 1 {
+                    self.updatePlaybackProgressInGui()
+                    self.togglePlayback(self)
+                } else {
+                    self.playbackProgressSlider.value = self.retrievePlaybackProgress()
+                    self.updatePlaybackProgress(self)
+                }
                 
                 self.waitingIndicator.stopAnimating()
                 self.playbackProgressSlider.enabled = true
