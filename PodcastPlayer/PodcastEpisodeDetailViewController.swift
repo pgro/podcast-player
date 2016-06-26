@@ -210,37 +210,43 @@ class PodcastEpisodeDetailViewController: UIViewController {
     }
  
 
+    func updatePlaybackProgressAndDuration() {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            [weak self] in
+            /* retrieve duration asynchronous so the GUI is not blocked
+             * when the asset needs to be retrieved from a remote URL */
+            let total = self?.player?.currentItem?.asset.duration.seconds
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                self?.durationLabel.text = self?.convertTimeToString(total!)
+                
+                self?.updatePlaybackProgressForCurrentPlaybackRate()
+                
+                self?.waitingIndicator.stopAnimating()
+                self?.playbackProgressSlider.enabled = true
+                self?.playButton.enabled = true
+                
+                self?.initRemoteControlInfo()
+            }
+        }
+    }
+    
+    func updatePlaybackProgressForCurrentPlaybackRate() {
+        if player?.rate == 1 {
+            updatePlaybackProgressInGui()
+            togglePlayback(self)
+        } else {
+            playbackProgressSlider.value = retrievePlaybackProgress()
+            updatePlaybackProgress(self)
+        }
+    }
+    
+    
 // MARK: load from/save to user defaults
     
     /** saves progress percentage per episode url */
     func savePlaybackProgress() {
         episode?.settings?.savePlaybackProgress(playbackProgressSlider.value)
-    }
-    
-    func updatePlaybackProgressAndDuration() {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            /* retrieve duration asynchronous so the GUI is not blocked
-             * when the asset needs to be retrieved from a remote URL */
-            let total = self.player?.currentItem?.asset.duration.seconds
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                self.durationLabel.text = self.convertTimeToString(total!)
-                
-                if self.player?.rate == 1 {
-                    self.updatePlaybackProgressInGui()
-                    self.togglePlayback(self)
-                } else {
-                    self.playbackProgressSlider.value = self.retrievePlaybackProgress()
-                    self.updatePlaybackProgress(self)
-                }
-                
-                self.waitingIndicator.stopAnimating()
-                self.playbackProgressSlider.enabled = true
-                self.playButton.enabled = true
-                
-                self.initRemoteControlInfo()
-            }
-        }
     }
     
     func retrievePlaybackProgress() -> Float {
