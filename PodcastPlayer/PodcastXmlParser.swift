@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PodcastXmlParser: NSObject, NSXMLParserDelegate {
+class PodcastXmlParser: NSObject, XMLParserDelegate {
     weak var podcast: Podcast?
     var episodes = Array<Episode>()
     var currentEpisode: Episode?
@@ -19,7 +19,7 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
     }
     
     func parseEpisodes() -> Array<Episode> {
-        let parser = NSXMLParser(contentsOfURL: NSURL(string: podcast!.feedUrl)!)
+        let parser = XMLParser(contentsOf: URL(string: podcast!.feedUrl)!)
         parser?.delegate = self
         parser?.parse()
         return episodes
@@ -28,7 +28,7 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
 
 // MARK: - NSXMLParserDelegate
     
-    func parser(parser: NSXMLParser,
+    func parser(_ parser: XMLParser,
                 didStartElement elementName: String,
                 namespaceURI: String?,
                 qualifiedName qName: String?,
@@ -44,7 +44,7 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
         tryToParseStreamUrl(attributeDict["url"])
     }
     
-    func tryToParseStreamUrl(xmlCandidateUrl: String?) {
+    func tryToParseStreamUrl(_ xmlCandidateUrl: String?) {
         if currentElementName != "enclosure" ||
             xmlCandidateUrl == nil {
             return
@@ -53,7 +53,7 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
         currentEpisode?.url = xmlCandidateUrl!
     }
     
-    func tryToParsePodcastImageUrl(xmlCandidateUrl: String?) {
+    func tryToParsePodcastImageUrl(_ xmlCandidateUrl: String?) {
         if currentElementName != "itunes:image" ||
             currentEpisode != nil ||
             xmlCandidateUrl == nil {
@@ -63,7 +63,7 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
         podcast?.imageUrl = xmlCandidateUrl!
     }
     
-    func parser(parser: NSXMLParser,
+    func parser(_ parser: XMLParser,
                 foundCharacters string: String) {
         if currentElementName == nil {
             return
@@ -74,7 +74,7 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
         }
     }
     
-    func parseEpisode(string: String) {
+    func parseEpisode(_ string: String) {
         switch currentElementName! {
         case "title":
             currentEpisode?.title += string
@@ -96,7 +96,7 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
         }
     }
     
-    func parser(parser: NSXMLParser,
+    func parser(_ parser: XMLParser,
                 didEndElement elementName: String,
                 namespaceURI: String?,
                 qualifiedName qName: String?) {
@@ -117,20 +117,22 @@ class PodcastXmlParser: NSObject, NSXMLParserDelegate {
             return
         }
         
-        let dayIndex = dateString.characters.indexOf(",")!.advancedBy(2)
-        dateString = dateString.substringFromIndex(dayIndex)
+        var dayIndex = dateString.characters.index(of: ",")!
+        dayIndex = dateString.index(dayIndex, offsetBy: 2)
+        dateString = dateString.substring(from: dayIndex)
         
-        let yearEndIndex = dateString.characters.indexOf(":")!.advancedBy(-3)
-        dateString = dateString.substringToIndex(yearEndIndex)
+        var yearEndIndex = dateString.characters.index(of: ":")!
+        yearEndIndex = dateString.index(yearEndIndex, offsetBy: -3)
+        dateString = dateString.substring(to: yearEndIndex)
         
-        let formatter = NSDateFormatter()
-        formatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        formatter.timeZone = NSTimeZone(name: "UTC")
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(identifier: "UTC")
         formatter.dateFormat = "dd LLL yyyy"
-        let t = formatter.dateFromString(dateString)
+        let t = formatter.date(from: dateString)
         let date = t!
         
         formatter.dateFormat = "yyyy-MM-dd"
-        currentEpisode?.date = formatter.stringFromDate(date)
+        currentEpisode?.date = formatter.string(from: date)
     }
 }

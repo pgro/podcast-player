@@ -9,7 +9,7 @@
 import Foundation
 
 
-typealias DictionaryOfDictionaries = Dictionary<String, Dictionary<String, AnyObject>>
+typealias DictionaryOfDictionaries = Dictionary<String, Dictionary<String, Any>>
 
 /*
  Settings for episodes are mapped like this:
@@ -39,8 +39,8 @@ class SettingsManager {
         
         var episodeEntry = loadEpisodeEntry()
         if episodeEntry[fileNameKey] == nil {
-            episodeEntry[fileNameKey] = NSUUID().UUIDString + "." +
-                                        NSURL(string: episodeUrl)!.pathExtension!
+            episodeEntry[fileNameKey] = UUID().uuidString + "." +
+                                        URL(string: episodeUrl)!.pathExtension
             saveEpisodeEntry(episodeEntry)
         }
         
@@ -60,7 +60,7 @@ class SettingsManager {
         return progress
     }
     
-    func savePlaybackProgress(value: Float) {
+    func savePlaybackProgress(_ value: Float) {
         var episodeEntry = loadEpisodeEntry()
         episodeEntry[playbackProgressKey] = value
         saveEpisodeEntry(episodeEntry)
@@ -77,7 +77,7 @@ class SettingsManager {
         return isRemoved
     }
     
-    func saveIsRemoved(value: Bool) {
+    func saveIsRemoved(_ value: Bool) {
         var episodeEntry = loadEpisodeEntry()
         episodeEntry[isRemovedKey] = value
         saveEpisodeEntry(episodeEntry)
@@ -87,19 +87,19 @@ class SettingsManager {
 // MARK: - root and episode settings entry
     
     private func loadRootEntry() ->DictionaryOfDictionaries {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.valueForKey(episodesRootKey) == nil {
+        let defaults = UserDefaults.standard
+        if defaults.value(forKey: episodesRootKey) == nil {
             defaults.setValue(DictionaryOfDictionaries(), forKey: episodesRootKey)
         }
         
         // maps episodes by their stream urls to a dictionary with settings for each
-        let episodes = defaults.valueForKey(episodesRootKey) as! DictionaryOfDictionaries
+        let episodes = defaults.value(forKey: episodesRootKey) as! DictionaryOfDictionaries
         
         return episodes
     }
     
-    private func saveRootEntry(entry: DictionaryOfDictionaries) {
-        let defaults = NSUserDefaults.standardUserDefaults()
+    private func saveRootEntry(_ entry: DictionaryOfDictionaries) {
+        let defaults = UserDefaults.standard
         defaults.setValue(entry, forKey: episodesRootKey)
     }
     
@@ -113,7 +113,7 @@ class SettingsManager {
         return episodes[episodeUrl]!
     }
     
-    func saveEpisodeEntry(entry: DictionaryOfDictionaries.Value) {
+    func saveEpisodeEntry(_ entry: DictionaryOfDictionaries.Value) {
         var episodes = loadRootEntry()
         episodes[episodeUrl] = entry
         saveRootEntry(episodes)

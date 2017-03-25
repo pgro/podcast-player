@@ -11,10 +11,10 @@ import UIKit
 class MainViewController: UIViewController {
     @IBOutlet weak var waitingIndicator: UIActivityIndicatorView!
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "embedEpisodesSegue" {
             navigationItem.title = "Podcast Episodes"
-            let controller = segue.destinationViewController as? PodcastEpisodesViewController
+            let controller = segue.destination as? PodcastEpisodesViewController
             controller?.waitingIndicator = waitingIndicator
             return
         }

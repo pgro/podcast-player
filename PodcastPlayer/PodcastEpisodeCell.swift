@@ -26,12 +26,12 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     }
 
     
-    @IBAction func doEpisodeFileAction(sender: AnyObject) {
+    @IBAction func doEpisodeFileAction(_ sender: AnyObject) {
         switch episode!.status {
-        case .NotStarted:
+        case .notStarted:
             episode?.download()
             break
-        case .Finished:
+        case .finished:
             episode?.delete()
             break
         default:
@@ -50,29 +50,29 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     
     func updateViewFromStatus() {
         switch episode!.status {
-        case .NotStarted:
-            statusView.backgroundColor = UIColor.redColor()
-            fileActionButton.hidden = false
-            fileActionButton.setTitle("", forState: .Normal) // set download icon via Font Awesome
+        case .notStarted:
+            statusView.backgroundColor = UIColor.red
+            fileActionButton.isHidden = false
+            fileActionButton.setTitle("", for: .normal) // set download icon via Font Awesome
             downloadingIndicator.stopAnimating()
             break
-        case .InProgress:
-            statusView.backgroundColor = UIColor.yellowColor()
-            fileActionButton.hidden = true
+        case .inProgress:
+            statusView.backgroundColor = UIColor.yellow
+            fileActionButton.isHidden = true
             downloadingIndicator.startAnimating()
             break
-        case .Finished:
-            statusView.backgroundColor = UIColor.greenColor()
-            fileActionButton.hidden = false
-            fileActionButton.setTitle("", forState: .Normal) // set trash icon via Font Awesome
+        case .finished:
+            statusView.backgroundColor = UIColor.green
+            fileActionButton.isHidden = false
+            fileActionButton.setTitle("", for: .normal) // set trash icon via Font Awesome
             downloadingIndicator.stopAnimating()
             break
         }
     }
 
     func updateRemovedState() {
-        titleLabel.textColor = episode!.isRemoved ? UIColor.darkGrayColor()
-                                                  : UIColor.blackColor()
+        titleLabel.textColor = episode!.isRemoved ? UIColor.darkGray
+                                                  : UIColor.black
         descriptionLabel.textColor = titleLabel.textColor
         dateLabel.textColor = titleLabel.textColor
     }
@@ -83,35 +83,35 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
             if showSelectionIndicator == oldValue {
                 return
             }
-
-            selectionButton.hidden = true
+            
+            selectionButton.isHidden = true
             selectionViewWidth.constant = showSelectionIndicator ? 40 : 0
-            UIView.animateWithDuration(0.3,
-                                       animations: {
-                                           self.layoutIfNeeded()
-                                       },
-                                       completion: { _ in
-                                           self.selectionButton.hidden = false
-                                       })
+            UIView.animate(withDuration: 0.3,
+                           animations: {
+                            self.layoutIfNeeded()
+            },
+                           completion: { _ in
+                            self.selectionButton.isHidden = false
+            })
         }
     }
     
-    override var selected: Bool {
+    override var isSelected: Bool {
         didSet {
-            let icon = selected ? "" // fa-check-circle-o
-                                : "" // fa-circle-o
-            selectionButton.setTitle(icon, forState: .Normal)
+            let icon = isSelected ? "" // fa-check-circle-o
+                                  : "" // fa-circle-o
+            selectionButton.setTitle(icon, for: .normal)
         }
     }
     
     
 // MARK: - EpisodeDelegate
     
-    func episode(episode: Episode, didChangeStatus status: DownloadStatus) {
+    func episode(_ episode: Episode, didChangeStatus status: DownloadStatus) {
         updateViewFromStatus()
     }
     
-    func episode(episode: Episode, didChangeIsRemoved isRemoved: Bool) {
+    func episode(_ episode: Episode, didChangeIsRemoved isRemoved: Bool) {
         updateRemovedState()
     }
 }

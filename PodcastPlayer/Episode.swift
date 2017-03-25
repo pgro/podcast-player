@@ -10,14 +10,14 @@ import Foundation
 
 
 enum DownloadStatus {
-    case NotStarted
-    case InProgress
-    case Finished
+    case notStarted
+    case inProgress
+    case finished
 }
 
 protocol EpisodeDelegate: class {
-    func episode(episode: Episode, didChangeStatus status: DownloadStatus)
-    func episode(episode: Episode, didChangeIsRemoved isRemoved: Bool)
+    func episode(_ episode: Episode, didChangeStatus status: DownloadStatus)
+    func episode(_ episode: Episode, didChangeIsRemoved isRemoved: Bool)
 }
 
 class Episode {
@@ -29,8 +29,8 @@ class Episode {
             settings = SettingsManager(episodeUrl: url)
             fileName = settings!.loadFileName()
             prepareFilePath()
-            status = fileExists() ? DownloadStatus.Finished
-                                  : DownloadStatus.NotStarted
+            status = fileExists() ? DownloadStatus.finished
+                                  : DownloadStatus.notStarted
             isRemoved = settings!.loadIsRemoved()
         }
     }
@@ -38,9 +38,9 @@ class Episode {
     var duration = ""
     var fileName = ""
     var filePath = ""
-    var status = DownloadStatus.NotStarted {
+    var status = DownloadStatus.notStarted {
         didSet {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 self.delegate?.episode(self, didChangeStatus: self.status)
             }
         }
@@ -50,7 +50,7 @@ class Episode {
     var isRemoved = false {
         didSet {
             settings?.saveIsRemoved(isRemoved)
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 self.delegate?.episode(self, didChangeIsRemoved: self.isRemoved)
             }
         }
@@ -60,28 +60,28 @@ class Episode {
 // MARK: - actions with file
     
     func download() {
-        if status == DownloadStatus.InProgress {
+        if status == DownloadStatus.inProgress {
             // download is already in progress -> nothing to do
             return
         }
         
         /* download selected podcast episode (if necessary)
          * and update the cell status accordingly */
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        DispatchQueue.global().async {
             if self.fileExists() {
-                self.status = DownloadStatus.Finished
+                self.status = DownloadStatus.finished
                 return
             }
             
             self.isRemoved = false
-            self.status = DownloadStatus.InProgress
-            guard let episodeFileData = NSData(contentsOfURL: NSURL(string: self.url)!) else {
-                self.status = DownloadStatus.NotStarted
+            self.status = DownloadStatus.inProgress
+            guard let episodeFileData = try? Data(contentsOf: URL(string: self.url)!) else {
+                self.status = DownloadStatus.notStarted
                 return
             }
-            let success = episodeFileData.writeToFile(self.filePath, atomically: true)
-            self.status = success ? DownloadStatus.Finished
-                                  : DownloadStatus.NotStarted
+            let success = (try? episodeFileData.write(to: URL(fileURLWithPath: self.filePath), options: [.atomic])) != nil
+            self.status = success ? DownloadStatus.finished
+                                  : DownloadStatus.notStarted
             if success {
                 self.excludeFromBackup()
             }
@@ -89,15 +89,15 @@ class Episode {
     }
     
     func delete() {
-        if status != .Finished {
+        if status != .finished {
             isRemoved = true
             return
         }
         
         assert(fileExists(), "file must exist")
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(filePath)
-            status = .NotStarted
+            try FileManager.default.removeItem(atPath: filePath)
+            status = .notStarted
             isRemoved = true
         } catch {
             debugPrint(error)
@@ -108,26 +108,26 @@ class Episode {
 // MARK: - file path handling
     
     func folderPathForEpisodes() -> String {
-        var folderPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
-        folderPath = folderPath.stringByAppendingString("/episodes")
+        var folderPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        folderPath = folderPath + "/episodes"
         return folderPath
     }
     
     func fileExists() -> Bool {
-        let fileManager = NSFileManager.defaultManager()
-        return fileManager.fileExistsAtPath(filePath)
+        let fileManager = FileManager.default
+        return fileManager.fileExists(atPath: filePath)
     }
     
     func prepareFilePath() {
         let folderPath = folderPathForEpisodes()
-        filePath = folderPath.stringByAppendingString("/" + fileName)
+        filePath = folderPath + ("/" + fileName)
         
         assureBackupExclusion()
         
         // create folder if needed
         do {
-            let fileManager = NSFileManager.defaultManager()
-            try fileManager.createDirectoryAtPath(folderPath, withIntermediateDirectories: true, attributes: nil)
+            let fileManager = FileManager.default
+            try fileManager.createDirectory(atPath: folderPath, withIntermediateDirectories: true, attributes: nil)
         } catch {
             debugPrint(error)
         }
@@ -143,9 +143,9 @@ class Episode {
         }
         
         do {
-            let fileUrl = NSURL(fileURLWithPath: filePath)
+            let fileUrl = URL(fileURLWithPath: filePath)
             var value: AnyObject?
-            try fileUrl.getResourceValue(&value, forKey: NSURLIsExcludedFromBackupKey)
+            try (fileUrl as NSURL).getResourceValue(&value, forKey: .isExcludedFromBackupKey)
             let isExcluded = value as? NSNumber
             assert(isExcluded != nil && isExcluded!.boolValue,
                    "downloaded podcast episode must be excluded from iCloud backup")
@@ -157,8 +157,8 @@ class Episode {
     /** Excludes the (downloaded) file from iCloud backup. */
     func excludeFromBackup() {
         do {
-            let fileUrl = NSURL(fileURLWithPath: filePath)
-            try fileUrl.setResourceValue(NSNumber(bool: true), forKey: NSURLIsExcludedFromBackupKey)
+            let fileUrl = URL(fileURLWithPath: filePath)
+            try (fileUrl as NSURL).setResourceValue(NSNumber(value: true), forKey: .isExcludedFromBackupKey)
         } catch {
             debugPrint(error)
         }

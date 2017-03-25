@@ -25,14 +25,14 @@ class Podcast {
     }
     
     
-    func loadImage(completion: (filePath: String) -> Void) {
+    func loadImage(_ completion: @escaping (_ filePath: String) -> Void) {
         if (imageUrl.isEmpty) {
             return
         }
         
         let cache = FileCache()
         cache.filePath(imageUrl) { filePath in
-            completion(filePath: filePath)
+            completion(filePath)
         }
     }
 }

@@ -13,7 +13,7 @@ class FileCache {
     private let rootKey = "CacheMappings"
     
     
-    func filePath(url: String, completion: (filePath: String) -> Void) {
+    func filePath(_ url: String, completion: @escaping (_ filePath: String) -> Void) {
         var entries = loadRootEntry()
         
         if entries[url] == nil {
@@ -26,27 +26,27 @@ class FileCache {
         //TODO: check for download in progress
         if fileExists(path) {
             assureBackupExclusion(path)
-            completion(filePath: path)
+            completion(path)
             return
         }
         
         //TODO: improve download handling
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        DispatchQueue.global().async {
             if !self.download(url, path: path) {
                 return
             }
-            dispatch_async(dispatch_get_main_queue()) {
-                completion(filePath: path)
+            DispatchQueue.main.async {
+                completion(path)
             }
         }
     }
     
     
-    private func download(url: String, path: String) -> Bool {
+    private func download(_ url: String, path: String) -> Bool {
         // create folder if needed
         do {
-            let fileManager = NSFileManager.defaultManager()
-            try fileManager.createDirectoryAtPath(rootFolder(),
+            let fileManager = FileManager.default
+            try fileManager.createDirectory(atPath: rootFolder(),
                                                   withIntermediateDirectories: true,
                                                   attributes: nil)
         } catch {
@@ -55,11 +55,11 @@ class FileCache {
         }
         
         // save file locally
-        guard let fileData = NSData(contentsOfURL: NSURL(string: url)!) else {
+        guard let fileData = try? Data(contentsOf: URL(string: url)!) else {
             debugPrint("couldn't download file from url: " + url)
             return false
         }
-        let success = fileData.writeToFile(path, atomically: true)
+        let success = (try? fileData.write(to: URL(fileURLWithPath: path), options: [.atomic])) != nil
         if !success {
             debugPrint("couldn't write file to: " + path)
             return false
@@ -71,40 +71,40 @@ class FileCache {
     }
     
     
-    private func storeNewFileName(url: String) {
+    private func storeNewFileName(_ url: String) {
         var entries = loadRootEntry()
         // create new unique file name
-        entries[url] = NSUUID().UUIDString + "." +
-            NSURL(string: url)!.pathExtension!
+        entries[url] = UUID().uuidString + "." +
+            URL(string: url)!.pathExtension
         saveRootEntry(entries)
     }
     
     private func rootFolder() -> String {
-        var folderPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        var folderPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         folderPath = folderPath + "/cache/"
         return folderPath
     }
     
-    private func fileExists(filePath: String) -> Bool {
-        let fileManager = NSFileManager.defaultManager()
-        return fileManager.fileExistsAtPath(filePath)
+    private func fileExists(_ filePath: String) -> Bool {
+        let fileManager = FileManager.default
+        return fileManager.fileExists(atPath: filePath)
     }
     
     
     // MARK: - settings handling
     
     private func loadRootEntry() -> Dictionary<String, String> {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        if defaults.valueForKey(rootKey) == nil {
+        let defaults = UserDefaults.standard
+        if defaults.value(forKey: rootKey) == nil {
             defaults.setValue(Dictionary<String, String>(), forKey: rootKey)
         }
         
-        let entries = defaults.valueForKey(rootKey) as! Dictionary<String, String>
+        let entries = defaults.value(forKey: rootKey) as! Dictionary<String, String>
         return entries
     }
     
-    private func saveRootEntry(entry: Dictionary<String, String>) {
-        let defaults = NSUserDefaults.standardUserDefaults()
+    private func saveRootEntry(_ entry: Dictionary<String, String>) {
+        let defaults = UserDefaults.standard
         defaults.setValue(entry, forKey: rootKey)
     }
     
@@ -112,15 +112,15 @@ class FileCache {
     // MARK: - iCloud backup exclusion
     
     /** Assures that the file (if existing) is excluded from iCloud backup. */
-    private func assureBackupExclusion(filePath: String) {
+    private func assureBackupExclusion(_ filePath: String) {
         if !fileExists(filePath) {
             return
         }
         
         do {
-            let fileUrl = NSURL(fileURLWithPath: filePath)
+            let fileUrl = URL(fileURLWithPath: filePath)
             var value: AnyObject?
-            try fileUrl.getResourceValue(&value, forKey: NSURLIsExcludedFromBackupKey)
+            try (fileUrl as NSURL).getResourceValue(&value, forKey: .isExcludedFromBackupKey)
             let isExcluded = value as? NSNumber
             assert(isExcluded != nil && isExcluded!.boolValue,
                    "cached file must be excluded from iCloud backup")
@@ -130,10 +130,10 @@ class FileCache {
     }
     
     /** Excludes the (downloaded) file from iCloud backup. */
-    private func excludeFromBackup(filePath: String) {
+    private func excludeFromBackup(_ filePath: String) {
         do {
-            let fileUrl = NSURL(fileURLWithPath: filePath)
-            try fileUrl.setResourceValue(NSNumber(bool: true), forKey: NSURLIsExcludedFromBackupKey)
+            let fileUrl = URL(fileURLWithPath: filePath)
+            try (fileUrl as NSURL).setResourceValue(NSNumber(value: true), forKey: .isExcludedFromBackupKey)
         } catch {
             debugPrint(error)
         }

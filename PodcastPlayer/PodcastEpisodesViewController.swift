@@ -28,7 +28,7 @@ class PodcastEpisodesViewController: UICollectionViewController {
         loadEpisodes()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         showBarButtons()
     }
@@ -36,36 +36,36 @@ class PodcastEpisodesViewController: UICollectionViewController {
     
     func createBarButtons() {
         multiSelectButton = UIBarButtonItem(title: "",
-                                            style: UIBarButtonItemStyle.Plain,
+                                            style: UIBarButtonItemStyle.plain,
                                             target: self,
                                             action: #selector(toggleMultiSelection))
         let font = UIFont(name: "FontAwesome", size: 20)
         multiSelectButton!.setTitleTextAttributes([NSFontAttributeName:font!],
-                                                 forState: UIControlState.Normal)
+                                                 for: .normal)
         deleteButton = UIBarButtonItem(title: "",
-                                       style: UIBarButtonItemStyle.Plain,
+                                       style: UIBarButtonItemStyle.plain,
                                        target: self,
                                        action: #selector(deleteSelectedEpisodes))
         deleteButton!.setTitleTextAttributes([NSFontAttributeName:font!],
-                                             forState: UIControlState.Normal)
+                                             for: .normal)
     }
     
     func showBarButtons() {
         if collectionView!.allowsMultipleSelection {
-            parentViewController?.navigationItem.rightBarButtonItems = [multiSelectButton!, deleteButton!]
+            parent?.navigationItem.rightBarButtonItems = [multiSelectButton!, deleteButton!]
         } else {
-            parentViewController?.navigationItem.rightBarButtonItems = [multiSelectButton!]
+            parent?.navigationItem.rightBarButtonItems = [multiSelectButton!]
         }
     }
     
     
     func loadEpisodes() {
         waitingIndicator?.startAnimating()
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        DispatchQueue.global().async {
             self.podcast.retrieveEpisodes()
             self.episodes = self.podcast.episodes
             self.sortEpisodes()
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 self.waitingIndicator?.stopAnimating()
                 self.collectionView?.reloadData()
             }
@@ -73,7 +73,7 @@ class PodcastEpisodesViewController: UICollectionViewController {
     }
     
     func sortEpisodes() {
-        episodes.sortInPlace({ (x, y) -> Bool in
+        episodes.sort(by: { (x, y) -> Bool in
             if x.isRemoved && !y.isRemoved {
                 return false
             }
@@ -86,15 +86,15 @@ class PodcastEpisodesViewController: UICollectionViewController {
     }
     
     
-    override func viewWillTransitionToSize(size: CGSize,
-                                           withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+    override func viewWillTransition(to size: CGSize,
+                                           with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         collectionViewLayout.invalidateLayout()
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showEpisodeDetailSegue" {
-            let controller = segue.destinationViewController as? PodcastEpisodeDetailViewController
+            let controller = segue.destination as? PodcastEpisodeDetailViewController
             let episodeCell = sender as? PodcastEpisodeCell
             controller?.episode = episodeCell?.episode
             controller?.podcast = podcast
@@ -104,14 +104,14 @@ class PodcastEpisodesViewController: UICollectionViewController {
     }
     
     
-    func toggleMultiSelection(sender: AnyObject) {
+    func toggleMultiSelection(_ sender: AnyObject) {
         collectionView?.allowsMultipleSelection = !collectionView!.allowsMultipleSelection
         showBarButtons()
         collectionView?.reloadData()
     }
     
-    func deleteSelectedEpisodes(sender: AnyObject) {
-        guard let selectedIndexPaths = collectionView?.indexPathsForSelectedItems() else {
+    func deleteSelectedEpisodes(_ sender: AnyObject) {
+        guard let selectedIndexPaths = collectionView?.indexPathsForSelectedItems else {
             return
         }
         for indexPath in selectedIndexPaths {
@@ -125,14 +125,14 @@ class PodcastEpisodesViewController: UICollectionViewController {
     
     //MARK: - UICollectionViewDataSource
     
-    override func collectionView(collectionView: UICollectionView,
+    override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int {
         return episodes.count
     }
     
-    override func collectionView(collectionView: UICollectionView,
-                                 cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("episodeCell", forIndexPath: indexPath) as! PodcastEpisodeCell
+    override func collectionView(_ collectionView: UICollectionView,
+                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "episodeCell", for: indexPath) as! PodcastEpisodeCell
         cell.episode = episodes[indexPath.item]
         cell.showSelectionIndicator = collectionView.allowsMultipleSelection
         return cell
@@ -141,23 +141,23 @@ class PodcastEpisodesViewController: UICollectionViewController {
     
     // MARK: UICollectionViewDelegate
     
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+                        sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         let totalWidth = collectionView.bounds.size.width
         let maxCellWidth = CGFloat(300)
         let columns = floor(totalWidth / maxCellWidth)
         let totalMargin = (columns + CGFloat(1)) * cellMargin
         let cellWidth = (totalWidth - totalMargin) / columns
-        let size = CGSizeMake(cellWidth, CGFloat(85))
+        let size = CGSize(width: cellWidth, height: CGFloat(85))
         return size
     }
     
-    override func collectionView(collectionView: UICollectionView,
-                                 didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    override func collectionView(_ collectionView: UICollectionView,
+                                 didSelectItemAt indexPath: IndexPath) {
         if !collectionView.allowsMultipleSelection {
-            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! PodcastEpisodeCell
-            performSegueWithIdentifier("showEpisodeDetailSegue", sender: cell)
+            let cell = collectionView.cellForItem(at: indexPath) as! PodcastEpisodeCell
+            performSegue(withIdentifier: "showEpisodeDetailSegue", sender: cell)
         }
     }
 }
