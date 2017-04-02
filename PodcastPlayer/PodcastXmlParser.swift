@@ -19,7 +19,9 @@ class PodcastXmlParser: NSObject, XMLParserDelegate {
     }
     
     func parseEpisodes() -> Array<Episode> {
-        let parser = XMLParser(contentsOf: URL(string: podcast!.feedUrl)!)
+        guard let feedUrl = podcast?.feedUrl,
+            let url = URL(string: feedUrl) else { return [] }
+        let parser = XMLParser(contentsOf: url)
         parser?.delegate = self
         parser?.parse()
         return episodes

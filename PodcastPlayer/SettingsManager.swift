@@ -36,27 +36,26 @@ class SettingsManager {
         Creates (and saves) it in case of a previously unknown url. */
     func loadFileName() -> String {
         let fileNameKey = "fileName"
-        
         var episodeEntry = loadEpisodeEntry()
-        if episodeEntry[fileNameKey] == nil {
-            episodeEntry[fileNameKey] = UUID().uuidString + "." +
-                                        URL(string: episodeUrl)!.pathExtension
+        guard let fileName = episodeEntry[fileNameKey] as? String else {
+            let fileExtension = URL(string: episodeUrl)?.pathExtension ?? "mp3"
+            let newFileName = UUID().uuidString + "." + fileExtension
+            episodeEntry[fileNameKey] = newFileName
             saveEpisodeEntry(episodeEntry)
+            return newFileName
         }
-        
-        let fileName = episodeEntry[fileNameKey] as! String
         return fileName
     }
     
     
     func loadPlaybackProgress() -> Float {
         var episodeEntry = loadEpisodeEntry()
-        if episodeEntry[playbackProgressKey] == nil {
-            episodeEntry[playbackProgressKey] = Float(0)
+        guard let progress = episodeEntry[playbackProgressKey] as? Float else {
+            let newValue: Float = 0
+            episodeEntry[playbackProgressKey] = newValue
             saveEpisodeEntry(episodeEntry)
+            return newValue
         }
-        
-        let progress = episodeEntry[playbackProgressKey] as! Float
         return progress
     }
     
@@ -68,12 +67,12 @@ class SettingsManager {
     
     func loadIsRemoved() -> Bool {
         var episodeEntry = loadEpisodeEntry()
-        if episodeEntry[isRemovedKey] == nil {
-            episodeEntry[isRemovedKey] = false
+        guard let isRemoved = episodeEntry[isRemovedKey] as? Bool else {
+            let newValue = false
+            episodeEntry[isRemovedKey] = newValue
             saveEpisodeEntry(episodeEntry)
+            return newValue
         }
-        
-        let isRemoved = episodeEntry[isRemovedKey] as! Bool
         return isRemoved
     }
     
@@ -86,15 +85,14 @@ class SettingsManager {
     
 // MARK: - root and episode settings entry
     
-    private func loadRootEntry() ->DictionaryOfDictionaries {
+    private func loadRootEntry() -> DictionaryOfDictionaries {
         let defaults = UserDefaults.standard
-        if defaults.value(forKey: episodesRootKey) == nil {
-            defaults.setValue(DictionaryOfDictionaries(), forKey: episodesRootKey)
-        }
-        
         // maps episodes by their stream urls to a dictionary with settings for each
-        let episodes = defaults.value(forKey: episodesRootKey) as! DictionaryOfDictionaries
-        
+        guard let episodes = defaults.value(forKey: episodesRootKey) as? DictionaryOfDictionaries else {
+            let newRoot = DictionaryOfDictionaries()
+            defaults.setValue(newRoot, forKey: episodesRootKey)
+            return newRoot
+        }
         return episodes
     }
     
@@ -104,13 +102,15 @@ class SettingsManager {
     }
     
     
-    private func loadEpisodeEntry() ->DictionaryOfDictionaries.Value {
+    private func loadEpisodeEntry() -> DictionaryOfDictionaries.Value {
         var episodes = loadRootEntry()
         
-        if episodes[episodeUrl] == nil {
-            episodes[episodeUrl] = DictionaryOfDictionaries.Value()
+        guard let episode = episodes[episodeUrl] else {
+            let newEntry = DictionaryOfDictionaries.Value()
+            episodes[episodeUrl] = newEntry
+            return newEntry
         }
-        return episodes[episodeUrl]!
+        return episode
     }
     
     func saveEpisodeEntry(_ entry: DictionaryOfDictionaries.Value) {

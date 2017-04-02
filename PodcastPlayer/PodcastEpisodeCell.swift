@@ -27,12 +27,13 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
 
     
     @IBAction func doEpisodeFileAction(_ sender: AnyObject) {
-        switch episode!.status {
+        guard let episode = episode else { return }
+        switch episode.status {
         case .notStarted:
-            episode?.download()
+            episode.download()
             break
         case .finished:
-            episode?.delete()
+            episode.delete()
             break
         default:
             break
@@ -41,15 +42,17 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     
 
     func updateViewFromEpisode() {
-        titleLabel.text = episode!.title
-        descriptionLabel.text = episode!.description
-        dateLabel.text = episode!.date
+        titleLabel.text = episode?.title
+        descriptionLabel.text = episode?.description
+        dateLabel.text = episode?.date
         updateViewFromStatus()
         updateRemovedState()
     }
     
     func updateViewFromStatus() {
-        switch episode!.status {
+        guard let episode = episode else { return }
+        
+        switch episode.status {
         case .notStarted:
             statusView.backgroundColor = UIColor.red
             fileActionButton.isHidden = false
@@ -71,8 +74,10 @@ class PodcastEpisodeCell: UICollectionViewCell, EpisodeDelegate {
     }
 
     func updateRemovedState() {
-        titleLabel.textColor = episode!.isRemoved ? UIColor.darkGray
-                                                  : UIColor.black
+        guard let episode = episode else { return }
+        
+        titleLabel.textColor = episode.isRemoved ? UIColor.darkGray
+                                                 : UIColor.black
         descriptionLabel.textColor = titleLabel.textColor
         dateLabel.textColor = titleLabel.textColor
     }

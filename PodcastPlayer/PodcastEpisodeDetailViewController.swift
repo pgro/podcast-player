@@ -91,7 +91,9 @@ class PodcastEpisodeDetailViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        player?.removeTimeObserver(playerObserver!)
+        if let playerObserver = playerObserver {
+            player?.removeTimeObserver(playerObserver)
+        }
         player?.currentItem?.removeObserver(self, forKeyPath: keepUpKey, context: &kvoContext)
         NotificationCenter.default.removeObserver(self)
         UIApplication.shared.endReceivingRemoteControlEvents()
@@ -107,21 +109,24 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     
     func initAssetAndProgress() {
-        var url = URL(string: episode!.url)
-        if episode!.fileExists() {
-            url = URL(fileURLWithPath: episode!.filePath)
-        }
+        guard let url = episodeUrl else { return }
         
         let asset = player?.currentItem?.asset as? AVURLAsset
-        if asset == nil || asset!.url.absoluteString != url?.absoluteString {
+        if asset == nil || asset?.url.absoluteString != url.absoluteString {
             player?.pause()
-            let playerItem = AVPlayerItem(url: url!)
+            let playerItem = AVPlayerItem(url: url)
             player?.replaceCurrentItem(with: playerItem)
             
             playbackProgressSlider.isEnabled = false
             playButton.isEnabled = false
         }
         updatePlaybackProgressAndDuration()
+    }
+    
+    private var episodeUrl: URL? {
+        guard let episode = episode else { return nil }
+        return episode.fileExists() ? URL(fileURLWithPath: episode.filePath)
+                                    : URL(string: episode.url)
     }
     
     func loadImage() {
@@ -173,9 +178,10 @@ class PodcastEpisodeDetailViewController: UIViewController {
             return
         }
         
-        let total = player?.currentItem?.asset.duration.seconds
         let new = time.seconds
-        playbackProgressSlider.value = Float(new / total!)
+        if let total = player?.currentItem?.asset.duration.seconds {
+            playbackProgressSlider.value = Float(new / total)
+        }
         positionLabel.text = convertTimeToString(new)
     }
     
@@ -194,10 +200,11 @@ class PodcastEpisodeDetailViewController: UIViewController {
     }
     
     func updatePlaybackProgressInGui() {
-        let total = player?.currentItem?.asset.duration.seconds
-        let current = self.player?.currentItem?.currentTime().seconds
-        self.playbackProgressSlider.value = Float(current! / total!)
-        let newPosition = Double(playbackProgressSlider.value) * total!
+        guard let total = player?.currentItem?.asset.duration.seconds,
+            let current = self.player?.currentItem?.currentTime().seconds
+            else { return }
+        self.playbackProgressSlider.value = Float(current / total)
+        let newPosition = Double(playbackProgressSlider.value) * total
         positionLabel.text = convertTimeToString(newPosition)
         updateRemoteControlProgress()
     }
@@ -218,7 +225,9 @@ class PodcastEpisodeDetailViewController: UIViewController {
             let total = self?.player?.currentItem?.asset.duration.seconds
             
             DispatchQueue.main.async {
-                self?.durationLabel.text = self?.convertTimeToString(total!)
+                if let total = total {
+                    self?.durationLabel.text = self?.convertTimeToString(total)
+                }
                 
                 self?.updatePlaybackProgressForCurrentPlaybackRate()
                 
@@ -251,7 +260,7 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     func retrievePlaybackProgress() -> Float {
         let progress = episode?.settings?.loadPlaybackProgress()
-        return progress!
+        return progress ?? 0
     }
     
     
@@ -264,8 +273,8 @@ class PodcastEpisodeDetailViewController: UIViewController {
     
     func restoreVolume() {
         let defaults = UserDefaults.standard
-        if defaults.value(forKey: volumeKey) != nil {
-            volumeSlider.value = defaults.value(forKey: volumeKey) as! Float
+        if let volume = defaults.value(forKey: volumeKey) as? Float {
+            volumeSlider.value = volume
             changeVolume(self)
         }
     }
@@ -287,10 +296,13 @@ class PodcastEpisodeDetailViewController: UIViewController {
     }
     
     func initRemoteControlInfo() {
-        let total = player?.currentItem?.asset.duration.seconds
-        let nowPlayingInfo = [MPMediaItemPropertyArtist : episode!.author,
-                              MPMediaItemPropertyTitle : episode!.title,
-                              MPMediaItemPropertyPlaybackDuration : NSNumber(value: Float(total!))] as [String : Any]
+        guard let episode = episode else { return }
+        
+        let total = player?.currentItem?.asset.duration.seconds ?? 0
+        let nowPlayingInfo = [MPMediaItemPropertyArtist : episode.author,
+                              MPMediaItemPropertyTitle : episode.title,
+                              MPMediaItemPropertyPlaybackDuration : NSNumber(value: Float(total))]
+            as [String : Any]
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
         updateRemoteControlProgress()
         updateRemoteControlArtwork(coverImageView.image)
@@ -304,21 +316,19 @@ class PodcastEpisodeDetailViewController: UIViewController {
         let rate = isPlaying ? 1.0 : 0.0
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = NSNumber(value: rate)
         
-        let total = player?.currentItem?.asset.duration.seconds
-        let newPosition = Double(playbackProgressSlider.value) * total!
+        let total = player?.currentItem?.asset.duration.seconds ?? 0
+        let newPosition = Double(playbackProgressSlider.value) * total
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: newPosition)
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
     
     func updateRemoteControlArtwork(_ image: UIImage?) {
-        if image == nil {
+        guard let image = image,
+            var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo else {
             return
         }
-        guard var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo else {
-            return
-        }
-        let artwork = MPMediaItemArtwork(image: image!)
+        let artwork = MPMediaItemArtwork(image: image)
         nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }

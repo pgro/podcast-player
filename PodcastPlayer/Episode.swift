@@ -27,11 +27,12 @@ class Episode {
     var url = "" {
         didSet {
             settings = SettingsManager(episodeUrl: url)
-            fileName = settings!.loadFileName()
+            guard let settings = self.settings else { return }
+            fileName = settings.loadFileName()
             prepareFilePath()
             status = fileExists() ? DownloadStatus.finished
                                   : DownloadStatus.notStarted
-            isRemoved = settings!.loadIsRemoved()
+            isRemoved = settings.loadIsRemoved()
         }
     }
     var date = ""
@@ -75,7 +76,8 @@ class Episode {
             
             self.isRemoved = false
             self.status = DownloadStatus.inProgress
-            guard let episodeFileData = try? Data(contentsOf: URL(string: self.url)!) else {
+            guard let url = URL(string: self.url),
+                let episodeFileData = try? Data(contentsOf: url) else {
                 self.status = DownloadStatus.notStarted
                 return
             }
@@ -146,12 +148,16 @@ class Episode {
             let fileUrl = URL(fileURLWithPath: filePath)
             var value: AnyObject?
             try (fileUrl as NSURL).getResourceValue(&value, forKey: .isExcludedFromBackupKey)
-            let isExcluded = value as? NSNumber
-            assert(isExcluded != nil && isExcluded!.boolValue,
+            assert(isExcluded(value),
                    "downloaded podcast episode must be excluded from iCloud backup")
         } catch {
             debugPrint(error)
         }
+    }
+    
+    private func isExcluded(_ settingsValue: AnyObject?) -> Bool {
+        guard let isExcluded = settingsValue as? NSNumber else { return false }
+        return isExcluded.boolValue
     }
     
     /** Excludes the (downloaded) file from iCloud backup. */
